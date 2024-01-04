@@ -147,7 +147,7 @@ export function MessageExporter() {
   type ExportFormat = (typeof formats)[number];
 
   const [exportConfig, setExportConfig] = useState({
-    format: "image" as ExportFormat,
+    format: "text" as ExportFormat,
     includeContext: true,
   });
 
@@ -200,7 +200,7 @@ export function MessageExporter() {
         style={currentStep.value !== "select" ? { display: "none" } : {}}
       >
         <List>
-          <ListItem
+          {/* <ListItem
             title={Locale.Export.Format.Title}
             subTitle={Locale.Export.Format.SubTitle}
           >
@@ -219,7 +219,7 @@ export function MessageExporter() {
                 </option>
               ))}
             </Select>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             title={Locale.Export.IncludeContext.Title}
             subTitle={Locale.Export.IncludeContext.SubTitle}
