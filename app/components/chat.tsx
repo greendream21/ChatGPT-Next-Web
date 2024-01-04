@@ -1095,19 +1095,21 @@ function _Chat() {
               }}
             />
           </div>
-          {showMaxIcon && (
+          {/* {showMaxIcon && (
             <div className="window-action-button">
               <IconButton
                 icon={config.tightBorder ? <MinIcon /> : <MaxIcon />}
                 bordered
                 onClick={() => {
-                  config.update(
-                    (config) => (config.tightBorder = !config.tightBorder),
-                  );
+                  // config.update(
+                  //   (config) => (config.tightBorder = !config.tightBorder),
+                  // );
+                  console.log(config);
+                  
                 }}
               />
             </div>
-          )}
+          )} */}
         </div>
 
         <PromptToast
