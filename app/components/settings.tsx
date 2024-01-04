@@ -492,13 +492,12 @@ function SyncItems() {
   return (
     <>
       <List>
-        <ListItem
+        {/* <ListItem
           title={Locale.Settings.Sync.CloudState}
           subTitle={
             syncStore.lastProvider
-              ? `${new Date(syncStore.lastSyncTime).toLocaleString()} [${
-                  syncStore.lastProvider
-                }]`
+              ? `${new Date(syncStore.lastSyncTime).toLocaleString()} [${syncStore.lastProvider
+              }]`
               : Locale.Settings.Sync.NotSyncYet
           }
         >
@@ -526,7 +525,7 @@ function SyncItems() {
               />
             )}
           </div>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem
           title={Locale.Settings.Sync.LocalState}
@@ -700,7 +699,7 @@ export function Settings() {
             </Popover>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
             subTitle={
               checkingUpdate
@@ -723,7 +722,7 @@ export function Settings() {
                 onClick={() => checkUpdate(true)}
               />
             )}
-          </ListItem>
+          </ListItem> */}
 
           <ListItem title={Locale.Settings.SendKey}>
             <Select
@@ -810,7 +809,7 @@ export function Settings() {
             ></input>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.SendPreviewBubble.Title}
             subTitle={Locale.Settings.SendPreviewBubble.SubTitle}
           >
@@ -824,12 +823,12 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
         <SyncItems />
 
-        <List>
+        {/* <List>
           <ListItem
             title={Locale.Settings.Mask.Splash.Title}
             subTitle={Locale.Settings.Mask.Splash.SubTitle}
@@ -840,8 +839,8 @@ export function Settings() {
               onChange={(e) =>
                 updateConfig(
                   (config) =>
-                    (config.dontShowMaskSplashScreen =
-                      !e.currentTarget.checked),
+                  (config.dontShowMaskSplashScreen =
+                    !e.currentTarget.checked),
                 )
               }
             ></input>
@@ -862,7 +861,7 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-        </List>
+        </List> */}
 
         <List>
           <ListItem
@@ -948,8 +947,8 @@ export function Settings() {
                       onChange={(e) => {
                         accessStore.update(
                           (access) =>
-                            (access.provider = e.target
-                              .value as ServiceProvider),
+                          (access.provider = e.target
+                            .value as ServiceProvider),
                         );
                       }}
                     >
@@ -963,7 +962,7 @@ export function Settings() {
 
                   {accessStore.provider === "OpenAI" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.OpenAI.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.OpenAI.Endpoint.SubTitle
@@ -980,7 +979,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.OpenAI.ApiKey.Title}
                         subTitle={Locale.Settings.Access.OpenAI.ApiKey.SubTitle}
@@ -1002,7 +1001,7 @@ export function Settings() {
                     </>
                   ) : accessStore.provider === "Azure" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Azure.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.Azure.Endpoint.SubTitle +
@@ -1020,7 +1019,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.Azure.ApiKey.Title}
                         subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
@@ -1039,7 +1038,7 @@ export function Settings() {
                           }}
                         />
                       </ListItem>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Azure.ApiVerion.Title}
                         subTitle={
                           Locale.Settings.Access.Azure.ApiVerion.SubTitle
@@ -1052,16 +1051,16 @@ export function Settings() {
                           onChange={(e) =>
                             accessStore.update(
                               (access) =>
-                                (access.azureApiVersion =
-                                  e.currentTarget.value),
+                              (access.azureApiVersion =
+                                e.currentTarget.value),
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                     </>
                   ) : accessStore.provider === "Google" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Google.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.Google.Endpoint.SubTitle +
@@ -1079,7 +1078,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.Azure.ApiKey.Title}
                         subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
@@ -1098,7 +1097,7 @@ export function Settings() {
                           }}
                         />
                       </ListItem>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Google.ApiVerion.Title}
                         subTitle={
                           Locale.Settings.Access.Google.ApiVerion.SubTitle
@@ -1111,12 +1110,12 @@ export function Settings() {
                           onChange={(e) =>
                             accessStore.update(
                               (access) =>
-                                (access.googleApiVersion =
-                                  e.currentTarget.value),
+                              (access.googleApiVersion =
+                                e.currentTarget.value),
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                     </>
                   ) : null}
                 </>
@@ -1132,9 +1131,9 @@ export function Settings() {
                   ? loadingUsage
                     ? Locale.Settings.Usage.IsChecking
                     : Locale.Settings.Usage.SubTitle(
-                        usage?.used ?? "[?]",
-                        usage?.subscription ?? "[?]",
-                      )
+                      usage?.used ?? "[?]",
+                      usage?.subscription ?? "[?]",
+                    )
                   : Locale.Settings.Usage.NoAccess
               }
             >
@@ -1150,7 +1149,7 @@ export function Settings() {
             </ListItem>
           ) : null}
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Access.CustomModel.Title}
             subTitle={Locale.Settings.Access.CustomModel.SubTitle}
           >
@@ -1164,10 +1163,10 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
-        <List>
+        {/* <List>
           <ModelConfigList
             modelConfig={config.modelConfig}
             updateConfig={(updater) => {
@@ -1176,13 +1175,13 @@ export function Settings() {
               config.update((config) => (config.modelConfig = modelConfig));
             }}
           />
-        </List>
+        </List> */}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
         )}
 
-        <DangerItems />
+        {/* <DangerItems /> */}
       </div>
     </ErrorBoundary>
   );
