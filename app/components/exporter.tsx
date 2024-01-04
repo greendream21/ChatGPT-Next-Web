@@ -112,9 +112,8 @@ function Steps<
           return (
             <div
               key={i}
-              className={`${styles["step"]} ${
-                styles[i <= props.index ? "step-finished" : ""]
-              } ${i === props.index && styles["step-current"]} clickable`}
+              className={`${styles["step"]} ${styles[i <= props.index ? "step-finished" : ""]
+                } ${i === props.index && styles["step-current"]} clickable`}
               onClick={() => {
                 props.onStepChange?.(i);
               }}

@@ -114,6 +114,8 @@ const tr: PartialLocaleType = {
       EditModal: {
         Title: "Edit Prompt",
       },
+      UserPrompt: "Kullanıcı İstemi",
+      SystemPrompt: "Sistem İstemi",
     },
     HistoryCount: {
       Title: "Ekli Mesaj Sayısı",

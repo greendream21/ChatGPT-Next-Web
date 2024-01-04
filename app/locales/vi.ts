@@ -114,6 +114,8 @@ const vi: PartialLocaleType = {
       EditModal: {
         Title: "Chỉnh sửa mẫu",
       },
+      UserPrompt: "Lời nhắc của người dùng",
+      SystemPrompt: "Lời nhắc hệ thống",
     },
     HistoryCount: {
       Title: "Số lượng tin nhắn đính kèm",

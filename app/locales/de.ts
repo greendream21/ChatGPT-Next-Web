@@ -114,6 +114,8 @@ const de: PartialLocaleType = {
       EditModal: {
         Title: "Edit Prompt",
       },
+      UserPrompt: "Benutzeraufforderung",
+      SystemPrompt: "Systemaufforderung",
     },
     HistoryCount: {
       Title: "Anzahl der angehängten Nachrichten",

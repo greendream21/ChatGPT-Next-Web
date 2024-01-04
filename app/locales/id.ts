@@ -228,6 +228,8 @@ const id: PartialLocaleType = {
       EditModal: {
         Title: "Edit Prompt",
       },
+      UserPrompt: "Perintah Pengguna",
+      SystemPrompt: "Perintah Sistem",
     },
     HistoryCount: {
       Title: "Jumlah Pesan Riwayat",
@@ -370,7 +372,7 @@ const id: PartialLocaleType = {
   Exporter: {
     Description: {
       Title: "Hanya pesan setelah menghapus konteks yang akan ditampilkan"
-    },  
+    },
     Model: "Model",
     Messages: "Pesan",
     Topic: "Topik",

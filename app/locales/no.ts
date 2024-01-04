@@ -96,6 +96,8 @@ const no: PartialLocaleType = {
         Add: "Legg til",
         Search: "Søk instrukser",
       },
+      UserPrompt: "Brukermelding",
+      SystemPrompt: "Systemmelding",
     },
     HistoryCount: {
       Title: "Tall på tilhørende meldinger",

@@ -111,6 +111,8 @@ const tw: PartialLocaleType = {
       EditModal: {
         Title: "編輯提示詞",
       },
+      UserPrompt: "使用者提示",
+      SystemPrompt: "系統提示",
     },
     HistoryCount: {
       Title: "附帶歷史訊息數",

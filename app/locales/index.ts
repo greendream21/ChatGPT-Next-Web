@@ -13,7 +13,6 @@ import vi from "./vi";
 import ru from "./ru";
 import no from "./no";
 import cs from "./cs";
-import ko from "./ko";
 import ar from "./ar";
 import bn from "./bn";
 import { merge } from "../utils/merge";
@@ -27,7 +26,6 @@ const ALL_LANGS = {
   tw,
   pt,
   jp,
-  ko,
   id,
   fr,
   es,
@@ -52,7 +50,6 @@ export const ALL_LANG_OPTIONS: Record<Lang, string> = {
   pt: "Português",
   tw: "繁體中文",
   jp: "日本語",
-  ko: "한국어",
   id: "Indonesia",
   fr: "Français",
   es: "Español",
@@ -89,7 +86,7 @@ function getItem(key: string) {
 function setItem(key: string, value: string) {
   try {
     localStorage.setItem(key, value);
-  } catch {}
+  } catch { }
 }
 
 function getLanguage() {
