@@ -252,6 +252,8 @@ const pt: PartialLocaleType = {
       EditModal: {
         Title: "Editar Prompt",
       },
+      UserPrompt: "Solicitação do usuário",
+      SystemPrompt: "Alerta do sistema",
     },
     HistoryCount: {
       Title: "Contagem de Mensagens Anexadas",

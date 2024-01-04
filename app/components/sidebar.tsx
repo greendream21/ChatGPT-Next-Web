@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 
 import styles from "./home.module.scss";
 
@@ -12,6 +12,8 @@ import DeleteIcon from "../icons/delete.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
+import PromptIcon from "../icons/prompt.svg";
+import { UserPromptModal } from "./prompter";
 
 import Locale from "../locales";
 
@@ -141,13 +143,14 @@ export function SideBar(props: { className?: string }) {
     [isMobileScreen],
   );
 
+  const [showPrompt, setShowPrompt] = useState(false);
+
   useHotKey();
 
   return (
     <div
-      className={`${styles.sidebar} ${props.className} ${
-        shouldNarrow && styles["narrow-sidebar"]
-      }`}
+      className={`${styles.sidebar} ${props.className} ${shouldNarrow && styles["narrow-sidebar"]
+        }`}
       style={{
         // #3016 disable transition on ios mobile screen
         transition: isMobileScreen && isIOSMobile ? "none" : undefined,
@@ -166,7 +169,7 @@ export function SideBar(props: { className?: string }) {
       </div>
 
       <div className={styles["sidebar-header-bar"]}>
-        <IconButton
+        {/* <IconButton
           icon={<MaskIcon />}
           text={shouldNarrow ? undefined : Locale.Mask.Name}
           className={styles["sidebar-bar-button"]}
@@ -184,6 +187,15 @@ export function SideBar(props: { className?: string }) {
           text={shouldNarrow ? undefined : Locale.Plugin.Name}
           className={styles["sidebar-bar-button"]}
           onClick={() => showToast(Locale.WIP)}
+          shadow
+        /> */}
+        <IconButton
+          icon={<PromptIcon />}
+          text={shouldNarrow ? undefined : Locale.Chat.InputActions.Prompt}
+          className={styles["sidebar-bar-button"]}
+          onClick={() => {
+            setShowPrompt(true);
+          }}
           shadow
         />
       </div>
@@ -238,6 +250,10 @@ export function SideBar(props: { className?: string }) {
           />
         </div>
       </div>
+
+      {showPrompt && (
+        <UserPromptModal onClose={() => setShowPrompt(false)} />
+      )}
 
       <div
         className={styles["sidebar-drag"]}

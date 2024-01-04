@@ -1,0 +1,153 @@
+.settings {
+  padding: 20px;
+  overflow: auto;
+}
+
+.avatar {
+  cursor: pointer;
+}
+
+.edit-prompt-modal {
+  display: flex;
+  flex-direction: column;
+
+  .edit-prompt-title {
+    max-width: unset;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .edit-prompt-content {
+    max-width: unset;
+  }
+}
+
+.steps {
+  background-color: var(--gray);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 5px;
+  position: relative;
+  box-shadow: var(--card-shadow) inset;
+  margin-bottom: 10px;
+
+  .steps-progress {
+    $padding: 5px;
+    height: calc(100% - 2 * $padding);
+    width: calc(100% - 2 * $padding);
+    position: absolute;
+    top: $padding;
+    left: $padding;
+
+    &-inner {
+      box-sizing: border-box;
+      box-shadow: var(--card-shadow);
+      border: var(--border-in-light);
+      content: "";
+      display: inline-block;
+      width: 0%;
+      height: 100%;
+      background-color: var(--white);
+      transition: all ease 0.3s;
+      border-radius: 8px;
+    }
+  }
+
+  .steps-inner {
+    display: flex;
+    transform: scale(1);
+
+    .step {
+      flex-grow: 1;
+      padding: 5px 10px;
+      font-size: 14px;
+      color: var(--black);
+      opacity: 0.5;
+      transition: all ease 0.3s;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      $radius: 8px;
+
+      &-finished {
+        opacity: 0.9;
+      }
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &-current {
+        color: var(--primary);
+      }
+
+      .step-index {
+        background-color: var(--gray);
+        border: var(--border-in-light);
+        border-radius: 6px;
+        display: inline-block;
+        padding: 0px 5px;
+        font-size: 12px;
+        margin-right: 8px;
+        opacity: 0.8;
+      }
+
+      .step-name {
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.user-prompt-modal {
+  min-height: 40vh;
+
+  .user-prompt-search {
+    width: 100%;
+    max-width: 100%;
+    margin-bottom: 10px;
+    background-color: var(--gray);
+  }
+
+  .user-prompt-list {
+    border: var(--border-in-light);
+    border-radius: 10px;
+
+    .user-prompt-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+
+      &:not(:last-child) {
+        border-bottom: var(--border-in-light);
+      }
+
+      .user-prompt-header {
+        max-width: calc(100% - 100px);
+
+        .user-prompt-title {
+          font-size: 14px;
+          line-height: 2;
+          font-weight: bold;
+        }
+
+        .user-prompt-content {
+          font-size: 12px;
+        }
+      }
+
+      .user-prompt-buttons {
+        display: flex;
+        align-items: center;
+        column-gap: 2px;
+
+        .user-prompt-button {
+          //height: 100%;
+          padding: 7px;
+        }
+      }
+    }
+  }
+}

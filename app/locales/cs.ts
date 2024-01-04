@@ -114,6 +114,8 @@ const cs: PartialLocaleType = {
       EditModal: {
         Title: "Editovat pokyn",
       },
+      UserPrompt: "Uživatelská výzva",
+      SystemPrompt: "Systémová výzva",
     },
     HistoryCount: {
       Title: "Počet připojených zpráv",

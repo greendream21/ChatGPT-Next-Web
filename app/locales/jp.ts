@@ -137,6 +137,8 @@ const jp: PartialLocaleType = {
       EditModal: {
         Title: "編集",
       },
+      UserPrompt: "ユーザープロンプト",
+      SystemPrompt: "システムプロンプト",
     },
     HistoryCount: {
       Title: "履歴メッセージ数を添付",

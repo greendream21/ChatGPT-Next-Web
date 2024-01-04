@@ -189,6 +189,8 @@ const bn: PartialLocaleType = {
       EditModal: {
         Title: "সম্পাদন করুন প্রম্পট",
       },
+      UserPrompt: "ইউজার প্রম্পট",
+      SystemPrompt: "সিস্টেম প্রম্পট",
     },
     HistoryCount: {
       Title: "সংযুক্ত বার্তা সংখ্যা",

@@ -158,6 +158,8 @@ ${builtin} مدمجة، ${custom} تم تعريفها من قبل المستخد
       EditModal: {
         Title: "تحرير الاقتراح",
       },
+      UserPrompt: "موجه المستخدم",
+      SystemPrompt: "موجه النظام",
     },
     HistoryCount: {
       Title: "عدد الرسائل المرفقة",

@@ -252,6 +252,8 @@ const en: LocaleType = {
       EditModal: {
         Title: "Edit Prompt",
       },
+      UserPrompt: "User Prompt",
+      SystemPrompt: "System Prompt",
     },
     HistoryCount: {
       Title: "Attached Messages Count",

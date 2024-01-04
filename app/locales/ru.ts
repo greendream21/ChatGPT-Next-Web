@@ -114,6 +114,8 @@ const ru: PartialLocaleType = {
       EditModal: {
         Title: "Редактировать подсказку",
       },
+      UserPrompt: "Пользовательское приглашение",
+      SystemPrompt: "Системная подсказка",
     },
     HistoryCount: {
       Title: "Количество прикрепляемых сообщений",
@@ -204,8 +206,7 @@ const ru: PartialLocaleType = {
     },
     EditModal: {
       Title: (readonly: boolean) =>
-        `Редактирование шаблона подсказки ${
-          readonly ? "(только для чтения)" : ""
+        `Редактирование шаблона подсказки ${readonly ? "(только для чтения)" : ""
         }`,
       Download: "Скачать",
       Clone: "Клонировать",

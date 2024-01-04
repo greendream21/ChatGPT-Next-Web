@@ -163,6 +163,8 @@ const fr: PartialLocaleType = {
       EditModal: {
         Title: "Modifier le prompt",
       },
+      UserPrompt: "Invite utilisateur",
+      SystemPrompt: "Invite système",
     },
     HistoryCount: {
       Title: "Nombre de messages joints",

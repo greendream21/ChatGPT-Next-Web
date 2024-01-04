@@ -249,6 +249,8 @@ const cn = {
       EditModal: {
         Title: "编辑提示词",
       },
+      UserPrompt: "用户提示",
+      SystemPrompt: "系统提示",
     },
     HistoryCount: {
       Title: "附带历史消息数",
@@ -470,8 +472,8 @@ const cn = {
 
 type DeepPartial<T> = T extends object
   ? {
-      [P in keyof T]?: DeepPartial<T[P]>;
-    }
+    [P in keyof T]?: DeepPartial<T[P]>;
+  }
   : T;
 
 export type LocaleType = typeof cn;

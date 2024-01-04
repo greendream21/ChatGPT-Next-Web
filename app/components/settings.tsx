@@ -1,5 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 
+import { UserPromptModal } from "./prompter"
+
 import styles from "./settings.module.scss";
 
 import ResetIcon from "../icons/reload.svg";
@@ -121,110 +123,110 @@ function EditPromptModal(props: { id: string; onClose: () => void }) {
   ) : null;
 }
 
-function UserPromptModal(props: { onClose?: () => void }) {
-  const promptStore = usePromptStore();
-  const userPrompts = promptStore.getUserPrompts();
-  const builtinPrompts = SearchService.builtinPrompts;
-  const allPrompts = userPrompts.concat(builtinPrompts);
-  const [searchInput, setSearchInput] = useState("");
-  const [searchPrompts, setSearchPrompts] = useState<Prompt[]>([]);
-  const prompts = searchInput.length > 0 ? searchPrompts : allPrompts;
+// function UserPromptModal(props: { onClose?: () => void }) {
+//   const promptStore = usePromptStore();
+//   const userPrompts = promptStore.getUserPrompts();
+//   const builtinPrompts = SearchService.builtinPrompts;
+//   const allPrompts = userPrompts.concat(builtinPrompts);
+//   const [searchInput, setSearchInput] = useState("");
+//   const [searchPrompts, setSearchPrompts] = useState<Prompt[]>([]);
+//   const prompts = searchInput.length > 0 ? searchPrompts : allPrompts;
 
-  const [editingPromptId, setEditingPromptId] = useState<string>();
+//   const [editingPromptId, setEditingPromptId] = useState<string>();
 
-  useEffect(() => {
-    if (searchInput.length > 0) {
-      const searchResult = SearchService.search(searchInput);
-      setSearchPrompts(searchResult);
-    } else {
-      setSearchPrompts([]);
-    }
-  }, [searchInput]);
+//   useEffect(() => {
+//     if (searchInput.length > 0) {
+//       const searchResult = SearchService.search(searchInput);
+//       setSearchPrompts(searchResult);
+//     } else {
+//       setSearchPrompts([]);
+//     }
+//   }, [searchInput]);
 
-  return (
-    <div className="modal-mask">
-      <Modal
-        title={Locale.Settings.Prompt.Modal.Title}
-        onClose={() => props.onClose?.()}
-        actions={[
-          <IconButton
-            key="add"
-            onClick={() => {
-              const promptId = promptStore.add({
-                id: nanoid(),
-                createdAt: Date.now(),
-                title: "Empty Prompt",
-                content: "Empty Prompt Content",
-              });
-              setEditingPromptId(promptId);
-            }}
-            icon={<AddIcon />}
-            bordered
-            text={Locale.Settings.Prompt.Modal.Add}
-          />,
-        ]}
-      >
-        <div className={styles["user-prompt-modal"]}>
-          <input
-            type="text"
-            className={styles["user-prompt-search"]}
-            placeholder={Locale.Settings.Prompt.Modal.Search}
-            value={searchInput}
-            onInput={(e) => setSearchInput(e.currentTarget.value)}
-          ></input>
+//   return (
+//     <div className="modal-mask">
+//       <Modal
+//         title={Locale.Settings.Prompt.Modal.Title}
+//         onClose={() => props.onClose?.()}
+//         actions={[
+//           <IconButton
+//             key="add"
+//             onClick={() => {
+//               const promptId = promptStore.add({
+//                 id: nanoid(),
+//                 createdAt: Date.now(),
+//                 title: "Empty Prompt",
+//                 content: "Empty Prompt Content",
+//               });
+//               setEditingPromptId(promptId);
+//             }}
+//             icon={<AddIcon />}
+//             bordered
+//             text={Locale.Settings.Prompt.Modal.Add}
+//           />,
+//         ]}
+//       >
+//         <div className={styles["user-prompt-modal"]}>
+//           <input
+//             type="text"
+//             className={styles["user-prompt-search"]}
+//             placeholder={Locale.Settings.Prompt.Modal.Search}
+//             value={searchInput}
+//             onInput={(e) => setSearchInput(e.currentTarget.value)}
+//           ></input>
 
-          <div className={styles["user-prompt-list"]}>
-            {prompts.map((v, _) => (
-              <div className={styles["user-prompt-item"]} key={v.id ?? v.title}>
-                <div className={styles["user-prompt-header"]}>
-                  <div className={styles["user-prompt-title"]}>{v.title}</div>
-                  <div className={styles["user-prompt-content"] + " one-line"}>
-                    {v.content}
-                  </div>
-                </div>
+//           <div className={styles["user-prompt-list"]}>
+//             {prompts.map((v, _) => (
+//               <div className={styles["user-prompt-item"]} key={v.id ?? v.title}>
+//                 <div className={styles["user-prompt-header"]}>
+//                   <div className={styles["user-prompt-title"]}>{v.title}</div>
+//                   <div className={styles["user-prompt-content"] + " one-line"}>
+//                     {v.content}
+//                   </div>
+//                 </div>
 
-                <div className={styles["user-prompt-buttons"]}>
-                  {v.isUser && (
-                    <IconButton
-                      icon={<ClearIcon />}
-                      className={styles["user-prompt-button"]}
-                      onClick={() => promptStore.remove(v.id!)}
-                    />
-                  )}
-                  {v.isUser ? (
-                    <IconButton
-                      icon={<EditIcon />}
-                      className={styles["user-prompt-button"]}
-                      onClick={() => setEditingPromptId(v.id)}
-                    />
-                  ) : (
-                    <IconButton
-                      icon={<EyeIcon />}
-                      className={styles["user-prompt-button"]}
-                      onClick={() => setEditingPromptId(v.id)}
-                    />
-                  )}
-                  <IconButton
-                    icon={<CopyIcon />}
-                    className={styles["user-prompt-button"]}
-                    onClick={() => copyToClipboard(v.content)}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </Modal>
+//                 <div className={styles["user-prompt-buttons"]}>
+//                   {v.isUser && (
+//                     <IconButton
+//                       icon={<ClearIcon />}
+//                       className={styles["user-prompt-button"]}
+//                       onClick={() => promptStore.remove(v.id!)}
+//                     />
+//                   )}
+//                   {v.isUser ? (
+//                     <IconButton
+//                       icon={<EditIcon />}
+//                       className={styles["user-prompt-button"]}
+//                       onClick={() => setEditingPromptId(v.id)}
+//                     />
+//                   ) : (
+//                     <IconButton
+//                       icon={<EyeIcon />}
+//                       className={styles["user-prompt-button"]}
+//                       onClick={() => setEditingPromptId(v.id)}
+//                     />
+//                   )}
+//                   <IconButton
+//                     icon={<CopyIcon />}
+//                     className={styles["user-prompt-button"]}
+//                     onClick={() => copyToClipboard(v.content)}
+//                   />
+//                 </div>
+//               </div>
+//             ))}
+//           </div>
+//         </div>
+//       </Modal>
 
-      {editingPromptId !== undefined && (
-        <EditPromptModal
-          id={editingPromptId!}
-          onClose={() => setEditingPromptId(undefined)}
-        />
-      )}
-    </div>
-  );
-}
+//       {editingPromptId !== undefined && (
+//         <EditPromptModal
+//           id={editingPromptId!}
+//           onClose={() => setEditingPromptId(undefined)}
+//         />
+//       )}
+//     </div>
+//   );
+// }
 
 function DangerItems() {
   const chatStore = useChatStore();
@@ -492,13 +494,12 @@ function SyncItems() {
   return (
     <>
       <List>
-        <ListItem
+        {/* <ListItem
           title={Locale.Settings.Sync.CloudState}
           subTitle={
             syncStore.lastProvider
-              ? `${new Date(syncStore.lastSyncTime).toLocaleString()} [${
-                  syncStore.lastProvider
-                }]`
+              ? `${new Date(syncStore.lastSyncTime).toLocaleString()} [${syncStore.lastProvider
+              }]`
               : Locale.Settings.Sync.NotSyncYet
           }
         >
@@ -526,7 +527,7 @@ function SyncItems() {
               />
             )}
           </div>
-        </ListItem>
+        </ListItem> */}
 
         <ListItem
           title={Locale.Settings.Sync.LocalState}
@@ -700,7 +701,7 @@ export function Settings() {
             </Popover>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
             subTitle={
               checkingUpdate
@@ -723,7 +724,7 @@ export function Settings() {
                 onClick={() => checkUpdate(true)}
               />
             )}
-          </ListItem>
+          </ListItem> */}
 
           <ListItem title={Locale.Settings.SendKey}>
             <Select
@@ -810,7 +811,7 @@ export function Settings() {
             ></input>
           </ListItem>
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.SendPreviewBubble.Title}
             subTitle={Locale.Settings.SendPreviewBubble.SubTitle}
           >
@@ -824,12 +825,12 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
         <SyncItems />
 
-        <List>
+        {/* <List>
           <ListItem
             title={Locale.Settings.Mask.Splash.Title}
             subTitle={Locale.Settings.Mask.Splash.SubTitle}
@@ -840,8 +841,8 @@ export function Settings() {
               onChange={(e) =>
                 updateConfig(
                   (config) =>
-                    (config.dontShowMaskSplashScreen =
-                      !e.currentTarget.checked),
+                  (config.dontShowMaskSplashScreen =
+                    !e.currentTarget.checked),
                 )
               }
             ></input>
@@ -862,7 +863,7 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-        </List>
+        </List> */}
 
         <List>
           <ListItem
@@ -948,8 +949,8 @@ export function Settings() {
                       onChange={(e) => {
                         accessStore.update(
                           (access) =>
-                            (access.provider = e.target
-                              .value as ServiceProvider),
+                          (access.provider = e.target
+                            .value as ServiceProvider),
                         );
                       }}
                     >
@@ -963,7 +964,7 @@ export function Settings() {
 
                   {accessStore.provider === "OpenAI" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.OpenAI.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.OpenAI.Endpoint.SubTitle
@@ -980,7 +981,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.OpenAI.ApiKey.Title}
                         subTitle={Locale.Settings.Access.OpenAI.ApiKey.SubTitle}
@@ -1002,7 +1003,7 @@ export function Settings() {
                     </>
                   ) : accessStore.provider === "Azure" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Azure.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.Azure.Endpoint.SubTitle +
@@ -1020,7 +1021,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.Azure.ApiKey.Title}
                         subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
@@ -1039,7 +1040,7 @@ export function Settings() {
                           }}
                         />
                       </ListItem>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Azure.ApiVerion.Title}
                         subTitle={
                           Locale.Settings.Access.Azure.ApiVerion.SubTitle
@@ -1052,16 +1053,16 @@ export function Settings() {
                           onChange={(e) =>
                             accessStore.update(
                               (access) =>
-                                (access.azureApiVersion =
-                                  e.currentTarget.value),
+                              (access.azureApiVersion =
+                                e.currentTarget.value),
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                     </>
                   ) : accessStore.provider === "Google" ? (
                     <>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Google.Endpoint.Title}
                         subTitle={
                           Locale.Settings.Access.Google.Endpoint.SubTitle +
@@ -1079,7 +1080,7 @@ export function Settings() {
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                       <ListItem
                         title={Locale.Settings.Access.Azure.ApiKey.Title}
                         subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
@@ -1098,7 +1099,7 @@ export function Settings() {
                           }}
                         />
                       </ListItem>
-                      <ListItem
+                      {/* <ListItem
                         title={Locale.Settings.Access.Google.ApiVerion.Title}
                         subTitle={
                           Locale.Settings.Access.Google.ApiVerion.SubTitle
@@ -1111,12 +1112,12 @@ export function Settings() {
                           onChange={(e) =>
                             accessStore.update(
                               (access) =>
-                                (access.googleApiVersion =
-                                  e.currentTarget.value),
+                              (access.googleApiVersion =
+                                e.currentTarget.value),
                             )
                           }
                         ></input>
-                      </ListItem>
+                      </ListItem> */}
                     </>
                   ) : null}
                 </>
@@ -1132,9 +1133,9 @@ export function Settings() {
                   ? loadingUsage
                     ? Locale.Settings.Usage.IsChecking
                     : Locale.Settings.Usage.SubTitle(
-                        usage?.used ?? "[?]",
-                        usage?.subscription ?? "[?]",
-                      )
+                      usage?.used ?? "[?]",
+                      usage?.subscription ?? "[?]",
+                    )
                   : Locale.Settings.Usage.NoAccess
               }
             >
@@ -1150,7 +1151,7 @@ export function Settings() {
             </ListItem>
           ) : null}
 
-          <ListItem
+          {/* <ListItem
             title={Locale.Settings.Access.CustomModel.Title}
             subTitle={Locale.Settings.Access.CustomModel.SubTitle}
           >
@@ -1164,10 +1165,10 @@ export function Settings() {
                 )
               }
             ></input>
-          </ListItem>
+          </ListItem> */}
         </List>
 
-        <List>
+        {/* <List>
           <ModelConfigList
             modelConfig={config.modelConfig}
             updateConfig={(updater) => {
@@ -1176,13 +1177,13 @@ export function Settings() {
               config.update((config) => (config.modelConfig = modelConfig));
             }}
           />
-        </List>
+        </List> */}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
         )}
 
-        <DangerItems />
+        {/* <DangerItems /> */}
       </div>
     </ErrorBoundary>
   );

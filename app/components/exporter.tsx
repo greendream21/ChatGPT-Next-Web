@@ -112,9 +112,8 @@ function Steps<
           return (
             <div
               key={i}
-              className={`${styles["step"]} ${
-                styles[i <= props.index ? "step-finished" : ""]
-              } ${i === props.index && styles["step-current"]} clickable`}
+              className={`${styles["step"]} ${styles[i <= props.index ? "step-finished" : ""]
+                } ${i === props.index && styles["step-current"]} clickable`}
               onClick={() => {
                 props.onStepChange?.(i);
               }}
@@ -147,7 +146,7 @@ export function MessageExporter() {
   type ExportFormat = (typeof formats)[number];
 
   const [exportConfig, setExportConfig] = useState({
-    format: "image" as ExportFormat,
+    format: "text" as ExportFormat,
     includeContext: true,
   });
 
@@ -200,7 +199,7 @@ export function MessageExporter() {
         style={currentStep.value !== "select" ? { display: "none" } : {}}
       >
         <List>
-          <ListItem
+          {/* <ListItem
             title={Locale.Export.Format.Title}
             subTitle={Locale.Export.Format.SubTitle}
           >
@@ -219,7 +218,7 @@ export function MessageExporter() {
                 </option>
               ))}
             </Select>
-          </ListItem>
+          </ListItem> */}
           <ListItem
             title={Locale.Export.IncludeContext.Title}
             subTitle={Locale.Export.IncludeContext.SubTitle}
