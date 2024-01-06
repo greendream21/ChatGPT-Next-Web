@@ -9,6 +9,7 @@ import ChatGptIcon from "../icons/chatgpt.svg";
 import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
 import DeleteIcon from "../icons/delete.svg";
+import UserIcon from "../icons/user.svg";
 import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
@@ -18,6 +19,8 @@ import { UserPromptModal } from "./prompter";
 import Locale from "../locales";
 
 import { useAppConfig, useChatStore } from "../store";
+
+import { UserButton } from "@clerk/nextjs";
 
 import {
   DEFAULT_SIDEBAR_WIDTH,
@@ -149,8 +152,9 @@ export function SideBar(props: { className?: string }) {
 
   return (
     <div
-      className={`${styles.sidebar} ${props.className} ${shouldNarrow && styles["narrow-sidebar"]
-        }`}
+      className={`${styles.sidebar} ${props.className} ${
+        shouldNarrow && styles["narrow-sidebar"]
+      }`}
       style={{
         // #3016 disable transition on ios mobile screen
         transition: isMobileScreen && isIOSMobile ? "none" : undefined,
@@ -198,6 +202,8 @@ export function SideBar(props: { className?: string }) {
           }}
           shadow
         />
+
+        <UserButton />
       </div>
 
       <div
@@ -251,9 +257,7 @@ export function SideBar(props: { className?: string }) {
         </div>
       </div>
 
-      {showPrompt && (
-        <UserPromptModal onClose={() => setShowPrompt(false)} />
-      )}
+      {showPrompt && <UserPromptModal onClose={() => setShowPrompt(false)} />}
 
       <div
         className={styles["sidebar-drag"]}

@@ -7,6 +7,8 @@ import { type Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
 
+import { ClerkProvider } from "@clerk/nextjs";
+
 const serverConfig = getServerSideConfig();
 
 export const metadata: Metadata = {
@@ -33,20 +35,22 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <head>
-        <meta name="config" content={JSON.stringify(getClientConfig())} />
-        <link rel="manifest" href="/site.webmanifest"></link>
-        <script src="/serviceWorkerRegister.js" defer></script>
-      </head>
-      <body>
-        {children}
-        {serverConfig?.isVercel && (
-          <>
-            <SpeedInsights />
-          </>
-        )}
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <head>
+          <meta name="config" content={JSON.stringify(getClientConfig())} />
+          <link rel="manifest" href="/site.webmanifest"></link>
+          <script src="/serviceWorkerRegister.js" defer></script>
+        </head>
+        <body>
+          {children}
+          {serverConfig?.isVercel && (
+            <>
+              <SpeedInsights />
+            </>
+          )}
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
