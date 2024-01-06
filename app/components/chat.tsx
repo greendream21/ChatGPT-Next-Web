@@ -68,6 +68,7 @@ import {
   List,
   ListItem,
   Modal,
+  Select,
   Selector,
   showConfirm,
   showPrompt,
@@ -467,13 +468,13 @@ export function ChatActions(props: {
           icon={<BottomIcon />}
         />
       )}
-      {props.hitBottom && (
+      {/* {props.hitBottom && (
         <ChatAction
           onClick={props.showPromptModal}
           text={Locale.Chat.InputActions.Settings}
           icon={<SettingsIcon />}
         />
-      )}
+      )} */}
 
       <ChatAction
         onClick={nextTheme}
@@ -497,7 +498,7 @@ export function ChatActions(props: {
         icon={<PromptIcon />}
       />
 
-      <ChatAction
+      {/* <ChatAction
         onClick={() => {
           navigate(Path.Masks);
         }}
@@ -518,13 +519,13 @@ export function ChatActions(props: {
             }
           });
         }}
-      />
+      /> */}
 
-      <ChatAction
+      {/* <ChatAction
         onClick={() => setShowModelSelector(true)}
         text={currentModel}
         icon={<RobotIcon />}
-      />
+      /> */}
 
       {showModelSelector && (
         <Selector
@@ -981,6 +982,13 @@ function _Chat() {
   const autoFocus = !isMobileScreen; // wont auto focus on mobile screen
   const showMaxIcon = !isMobileScreen && !clientConfig?.isApp;
 
+  const currentModel = chatStore.currentSession().mask.modelConfig.model;
+  const allModels = useAllModels();
+  const models = useMemo(
+    () => allModels.filter((m) => m.available),
+    [allModels],
+  );
+
   useCommand({
     fill: setUserInput,
     submit: (text) => {
@@ -1076,6 +1084,23 @@ function _Chat() {
           </div>
         </div>
         <div className="window-actions">
+          <Select
+            value={currentModel}
+            onChange={(e) => {
+              console.log("Model", e.target.value);
+              chatStore.updateCurrentSession((session) => {
+                session.mask.modelConfig.model = e.target.value as ModelType;
+                session.mask.syncGlobalConfig = false;
+              });
+              showToast(e.target.value);
+            }}
+          >
+            {models.map((m) => (
+              <option value={m.name} key={m.name}>
+                {m.displayName}
+              </option>
+            ))}
+          </Select>
           {!isMobileScreen && (
             <div className="window-action-button">
               <IconButton
