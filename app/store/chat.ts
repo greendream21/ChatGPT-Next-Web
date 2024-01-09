@@ -607,7 +607,7 @@ export const useChatStore = createPersistStore(
       },
     };
 
-    return methods;
+    return;
   },
   {
     name: StoreKey.Chat,

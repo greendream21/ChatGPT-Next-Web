@@ -30,6 +30,9 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+
 export function Loading(props: { noLogo?: boolean }) {
   return (
     <div className={styles["loading-content"] + " no-dark"}>
@@ -131,9 +134,38 @@ function Screen() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
+  const [query, useQuery] = useState(2);
+
+  const data = useUser();
+
+  const userId = data.user?.id;
+  const userEmail = data.user?.primaryEmailAddress?.emailAddress;
+
+  const agentData = {
+    userId,
+    query,
+    userEmail,
+  };
+
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
+
+  const fetchData = async () => {
+    const response = await axios.post("/api/user", agentData);
+    const newData = response.data;
+  };
+
+  useEffect(() => {
+    if (
+      agentData &&
+      agentData.userId &&
+      agentData.query &&
+      agentData.userEmail
+    ) {
+      fetchData();
+    }
+  }, [agentData]);
 
   return (
     <div
