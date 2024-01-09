@@ -1,4 +1,4 @@
-import User from "../../models/user";
+import User from "../../models/userModel";
 import dbConnect from "../../lib/dbConnect";
 
 export async function getData() {
