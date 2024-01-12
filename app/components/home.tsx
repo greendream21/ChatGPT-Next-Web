@@ -30,7 +30,7 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, useClerk } from "@clerk/nextjs";
 import axios from "axios";
 
 export function Loading(props: { noLogo?: boolean }) {
@@ -134,17 +134,21 @@ function Screen() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
-  const [query, useQuery] = useState(2);
+  const [amount, useAmount] = useState(20);
+  const [status, setStatus] = useState("Active");
+
+  const { client } = useClerk();
+
+  console.log("HHHHHHH", client);
 
   const data = useUser();
 
-  const userId = data.user?.id;
   const userEmail = data.user?.primaryEmailAddress?.emailAddress;
 
   const agentData = {
-    userId,
-    query,
     userEmail,
+    amount,
+    status,
   };
 
   useEffect(() => {
@@ -153,15 +157,18 @@ function Screen() {
 
   const fetchData = async () => {
     const response = await axios.post("/api/user", agentData);
-    const newData = response.data;
+
+    const result = response.data.status;
+
+    return result;
   };
 
   useEffect(() => {
     if (
       agentData &&
-      agentData.userId &&
-      agentData.query &&
-      agentData.userEmail
+      agentData.userEmail &&
+      agentData.amount &&
+      agentData.status
     ) {
       fetchData();
     }

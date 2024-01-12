@@ -12,17 +12,19 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId, query, userEmail } = await request.json();
+  const { userEmail, amount, status } = await request.json();
 
   const newData = {
-    userId: String(userId),
-    query: Number(query),
-    userEmail: String(userEmail),
+    userEmail,
+    amount,
+    status,
   };
+
+  console.log("HHHHHHHHH", newData);
 
   await createData(newData);
   let json_response = {
-    status: "success",
+    status: true,
   };
   return NextResponse.json(json_response);
 }
