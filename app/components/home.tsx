@@ -30,7 +30,7 @@ import { getClientConfig } from "../config/client";
 import { ClientApi } from "../client/api";
 import { useAccessStore } from "../store";
 
-import { useUser, useClerk } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import axios from "axios";
 
 export function Loading(props: { noLogo?: boolean }) {
@@ -134,12 +134,7 @@ function Screen() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
-  const [amount, useAmount] = useState(20);
   const [status, setStatus] = useState("Active");
-
-  const { client } = useClerk();
-
-  console.log("HHHHHHH", client);
 
   const data = useUser();
 
@@ -147,7 +142,6 @@ function Screen() {
 
   const agentData = {
     userEmail,
-    amount,
     status,
   };
 
@@ -164,12 +158,7 @@ function Screen() {
   };
 
   useEffect(() => {
-    if (
-      agentData &&
-      agentData.userEmail &&
-      agentData.amount &&
-      agentData.status
-    ) {
+    if (agentData && agentData.userEmail && agentData.status) {
       fetchData();
     }
   }, [agentData]);

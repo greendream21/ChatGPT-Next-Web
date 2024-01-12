@@ -6,7 +6,7 @@ export async function GET() {
 
   let json_response = {
     data: data,
-    status: "success",
+    status: true,
   };
   return NextResponse.json(json_response);
 }

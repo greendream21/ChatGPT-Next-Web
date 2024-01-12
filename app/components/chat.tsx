@@ -91,6 +91,9 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
@@ -696,18 +699,41 @@ function _Chat() {
     }
   };
 
-  const doSubmit = (userInput: string) => {
+  const userdata = useUser();
+
+  const doSubmit = async (userInput: string) => {
+    const userEmail = userdata.user?.primaryEmailAddress?.emailAddress;
+
+    const response = await axios.get("/api/user");
+
+    const { data } = response.data;
+
+    let freeTierLimit = 0;
+
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].userEmail === userEmail) {
+        freeTierLimit = data[i].amount;
+      }
+    }
+
     let limitMsgValue = 0;
 
     chatStore.sessions.forEach((session) => {
-      session.messages.forEach((message) => {
+      session.messages.forEach(async (message) => {
         if (message.role === "user") {
-          limitMsgValue++;
+          freeTierLimit--;
+
+          const agentData = {
+            userEmail,
+            amount: freeTierLimit,
+          };
+
+          await axios.post("/api/user", agentData);
         }
       });
     });
 
-    let freeTierLimit = 20;
+    console.log("HHHHHHH", freeTierLimit);
 
     if (limitMsgValue > freeTierLimit) {
       showToast("Free tier limit!");
