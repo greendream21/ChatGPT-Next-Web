@@ -4,10 +4,6 @@ const Schema = mongoose.Schema;
 const UserSchema = new Schema(
   {
     userId: { type: String, required: true },
-    userEmail: { type: String },
-    query: { type: Number },
-    customer: { type: String },
-    subscription_id: { type: String },
     amount: { type: Number },
   },
   { timestamps: true },

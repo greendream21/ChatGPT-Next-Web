@@ -91,6 +91,9 @@ import { ExportMessageModal } from "./exporter";
 import { getClientConfig } from "../config/client";
 import { useAllModels } from "../utils/hooks";
 
+import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
 });
@@ -630,6 +633,11 @@ function _Chat() {
   const isMobileScreen = useMobileScreen();
   const navigate = useNavigate();
 
+  const userdata = useUser();
+  const userId = userdata.user?.id;
+
+  const [limit, setLimit] = useState();
+
   // prompt hints
   const promptStore = usePromptStore();
   const [promptHints, setPromptHints] = useState<RenderPompt[]>([]);
@@ -662,6 +670,36 @@ function _Chat() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(measure, [userInput]);
+
+  const updateData = async (agentData: any) => {
+    if (!userId) return;
+
+    try {
+      await axios.post("/api/user", agentData);
+
+      getData();
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const { data } = await axios.get("/api/user");
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].userId === userId) {
+          setLimit(data[i].amount);
+        }
+      }
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   // chat commands shortcuts
   const chatCommands = useChatCommand({
@@ -696,20 +734,19 @@ function _Chat() {
     }
   };
 
-  const doSubmit = (userInput: string) => {
-    let limitMsgValue = 0;
+  const doSubmit = async (userInput: string) => {
+    if (typeof limit === "undefined") return;
+    let freeTierLimit = limit - 1;
 
-    chatStore.sessions.forEach((session) => {
-      session.messages.forEach((message) => {
-        if (message.role === "user") {
-          limitMsgValue++;
-        }
-      });
-    });
+    const agentData = {
+      userId,
+      amount: freeTierLimit,
+    };
 
-    let freeTierLimit = 20;
+    updateData(agentData);
 
-    if (limitMsgValue > freeTierLimit) {
+    if (freeTierLimit === -1) {
+      console.log("Limit:", freeTierLimit);
       showToast("Free tier limit!");
       return;
     }
