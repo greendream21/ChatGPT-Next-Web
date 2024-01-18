@@ -736,6 +736,12 @@ function _Chat() {
 
   const doSubmit = async (userInput: string) => {
     if (typeof limit === "undefined") return;
+
+    if (limit === 0) {
+      showToast("Free tier limit!");
+      return;
+    }
+
     let freeTierLimit = limit - 1;
 
     const agentData = {
@@ -744,12 +750,6 @@ function _Chat() {
     };
 
     updateData(agentData);
-
-    if (freeTierLimit === -1) {
-      console.log("Limit:", freeTierLimit);
-      showToast("Free tier limit!");
-      return;
-    }
 
     if (userInput.trim() === "") return;
 
