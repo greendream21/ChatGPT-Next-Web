@@ -3,9 +3,8 @@ const Schema = mongoose.Schema;
 
 const UserSchema = new Schema(
   {
-    userEmail: { type: String, required: true },
+    userId: { type: String, required: true },
     amount: { type: Number },
-    status: { type: String },
   },
   { timestamps: true },
 );

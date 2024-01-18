@@ -633,6 +633,11 @@ function _Chat() {
   const isMobileScreen = useMobileScreen();
   const navigate = useNavigate();
 
+  const userdata = useUser();
+  const userId = userdata.user?.id;
+
+  const [limit, setLimit] = useState();
+
   // prompt hints
   const promptStore = usePromptStore();
   const [promptHints, setPromptHints] = useState<RenderPompt[]>([]);
@@ -665,6 +670,36 @@ function _Chat() {
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(measure, [userInput]);
+
+  const updateData = async (agentData: any) => {
+    if (!userId) return;
+
+    try {
+      await axios.post("/api/user", agentData);
+
+      getData();
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
+  };
+
+  const getData = async () => {
+    try {
+      const { data } = await axios.get("/api/user");
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].userId === userId) {
+          setLimit(data[i].amount);
+        }
+      }
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
+  };
+
+  useEffect(() => {
+    getData();
+  }, []);
 
   // chat commands shortcuts
   const chatCommands = useChatCommand({
@@ -699,43 +734,19 @@ function _Chat() {
     }
   };
 
-  const userdata = useUser();
-
   const doSubmit = async (userInput: string) => {
-    const userEmail = userdata.user?.primaryEmailAddress?.emailAddress;
+    if (typeof limit === "undefined") return;
+    let freeTierLimit = limit - 1;
 
-    const response = await axios.get("/api/user");
+    const agentData = {
+      userId,
+      amount: freeTierLimit,
+    };
 
-    const { data } = response.data;
+    updateData(agentData);
 
-    let freeTierLimit = 0;
-
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].userEmail === userEmail) {
-        freeTierLimit = data[i].amount;
-      }
-    }
-
-    let limitMsgValue = 0;
-
-    chatStore.sessions.forEach((session) => {
-      session.messages.forEach(async (message) => {
-        if (message.role === "user") {
-          freeTierLimit--;
-
-          const agentData = {
-            userEmail,
-            amount: freeTierLimit,
-          };
-
-          await axios.post("/api/user", agentData);
-        }
-      });
-    });
-
-    console.log("HHHHHHH", freeTierLimit);
-
-    if (limitMsgValue > freeTierLimit) {
+    if (freeTierLimit === -1) {
+      console.log("Limit:", freeTierLimit);
       showToast("Free tier limit!");
       return;
     }

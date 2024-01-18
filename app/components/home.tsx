@@ -134,34 +134,26 @@ function Screen() {
   const shouldTightBorder =
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
-  const [status, setStatus] = useState("Active");
-
   const data = useUser();
 
-  const userEmail = data.user?.primaryEmailAddress?.emailAddress;
-
-  const agentData = {
-    userEmail,
-    status,
-  };
+  const userId = data.user?.id;
 
   useEffect(() => {
     loadAsyncGoogleFont();
   }, []);
 
   const fetchData = async () => {
-    const response = await axios.post("/api/user", agentData);
-
-    const result = response.data.status;
-
-    return result;
+    try {
+      const response = await axios.post("/api/user", { userId });
+      console.log("Response", response);
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
   };
 
   useEffect(() => {
-    if (agentData && agentData.userEmail && agentData.status) {
-      fetchData();
-    }
-  }, [agentData]);
+    if (userId) fetchData();
+  }, [userId]);
 
   return (
     <div
