@@ -144,14 +144,32 @@ function Screen() {
 
   const fetchData = async () => {
     try {
-      const response = await axios.post("/api/user", { userId });
+      const { data } = await axios.get("/api/setting");
+
+      let amount: any;
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === "default") {
+          amount = data[i].limit;
+        }
+      }
+
+      const newData = {
+        userId,
+        amount,
+      };
+      console.log("Errrr", newData);
+
+      const response = await axios.post("/api/user", newData);
     } catch (error) {
       console.error("Errors: ", error);
     }
   };
 
   useEffect(() => {
-    if (userId) fetchData();
+    if (userId) {
+      fetchData();
+    }
   }, [userId]);
 
   return (

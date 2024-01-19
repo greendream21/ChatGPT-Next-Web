@@ -33,21 +33,7 @@ export async function POST(request: NextRequest) {
     const checkAvailable = await User.findOne({ userId });
 
     if (checkAvailable) {
-      if (typeof amount === "undefined") {
-        return NextResponse.json(checkAvailable);
-      } else {
-        console.log("data", newData);
-
-        const response = await User.updateOne(
-          { userId: newData.userId },
-          { $set: { amount: newData.amount } },
-        );
-
-        console.log(response.matchedCount + " document(s) matched");
-        console.log(response.modifiedCount + " document(s) updated");
-
-        return NextResponse.json(response);
-      }
+      return NextResponse.json(checkAvailable);
     } else {
       const response = await data.save();
 
