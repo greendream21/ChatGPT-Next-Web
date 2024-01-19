@@ -145,7 +145,6 @@ function Screen() {
   const fetchData = async () => {
     try {
       const response = await axios.post("/api/user", { userId });
-      console.log("Response", response);
     } catch (error) {
       console.error("Errors: ", error);
     }
