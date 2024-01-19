@@ -1,21 +1,16 @@
 import { useState, useEffect, useMemo } from "react";
 
-import { UserPromptModal } from "./prompter"
+import { UserPromptModal } from "./prompter";
 
 import styles from "./settings.module.scss";
 
-import ResetIcon from "../icons/reload.svg";
-import AddIcon from "../icons/add.svg";
 import CloseIcon from "../icons/close.svg";
-import CopyIcon from "../icons/copy.svg";
-import ClearIcon from "../icons/clear.svg";
 import LoadingIcon from "../icons/three-dots.svg";
 import EditIcon from "../icons/edit.svg";
-import EyeIcon from "../icons/eye.svg";
 import DownloadIcon from "../icons/download.svg";
 import UploadIcon from "../icons/upload.svg";
-import ConfigIcon from "../icons/config.svg";
 import ConfirmIcon from "../icons/confirm.svg";
+import CheckIcon from "../icons/check.svg";
 
 import ConnectionIcon from "../icons/connection.svg";
 import CloudSuccessIcon from "../icons/cloud-success.svg";
@@ -73,198 +68,7 @@ import { useSyncStore } from "../store/sync";
 import { nanoid } from "nanoid";
 import { useMaskStore } from "../store/mask";
 import { ProviderType } from "../utils/cloud";
-
-function EditPromptModal(props: { id: string; onClose: () => void }) {
-  const promptStore = usePromptStore();
-  const prompt = promptStore.get(props.id);
-
-  return prompt ? (
-    <div className="modal-mask">
-      <Modal
-        title={Locale.Settings.Prompt.EditModal.Title}
-        onClose={props.onClose}
-        actions={[
-          <IconButton
-            key=""
-            onClick={props.onClose}
-            text={Locale.UI.Confirm}
-            bordered
-          />,
-        ]}
-      >
-        <div className={styles["edit-prompt-modal"]}>
-          <input
-            type="text"
-            value={prompt.title}
-            readOnly={!prompt.isUser}
-            className={styles["edit-prompt-title"]}
-            onInput={(e) =>
-              promptStore.updatePrompt(
-                props.id,
-                (prompt) => (prompt.title = e.currentTarget.value),
-              )
-            }
-          ></input>
-          <Input
-            value={prompt.content}
-            readOnly={!prompt.isUser}
-            className={styles["edit-prompt-content"]}
-            rows={10}
-            onInput={(e) =>
-              promptStore.updatePrompt(
-                props.id,
-                (prompt) => (prompt.content = e.currentTarget.value),
-              )
-            }
-          ></Input>
-        </div>
-      </Modal>
-    </div>
-  ) : null;
-}
-
-// function UserPromptModal(props: { onClose?: () => void }) {
-//   const promptStore = usePromptStore();
-//   const userPrompts = promptStore.getUserPrompts();
-//   const builtinPrompts = SearchService.builtinPrompts;
-//   const allPrompts = userPrompts.concat(builtinPrompts);
-//   const [searchInput, setSearchInput] = useState("");
-//   const [searchPrompts, setSearchPrompts] = useState<Prompt[]>([]);
-//   const prompts = searchInput.length > 0 ? searchPrompts : allPrompts;
-
-//   const [editingPromptId, setEditingPromptId] = useState<string>();
-
-//   useEffect(() => {
-//     if (searchInput.length > 0) {
-//       const searchResult = SearchService.search(searchInput);
-//       setSearchPrompts(searchResult);
-//     } else {
-//       setSearchPrompts([]);
-//     }
-//   }, [searchInput]);
-
-//   return (
-//     <div className="modal-mask">
-//       <Modal
-//         title={Locale.Settings.Prompt.Modal.Title}
-//         onClose={() => props.onClose?.()}
-//         actions={[
-//           <IconButton
-//             key="add"
-//             onClick={() => {
-//               const promptId = promptStore.add({
-//                 id: nanoid(),
-//                 createdAt: Date.now(),
-//                 title: "Empty Prompt",
-//                 content: "Empty Prompt Content",
-//               });
-//               setEditingPromptId(promptId);
-//             }}
-//             icon={<AddIcon />}
-//             bordered
-//             text={Locale.Settings.Prompt.Modal.Add}
-//           />,
-//         ]}
-//       >
-//         <div className={styles["user-prompt-modal"]}>
-//           <input
-//             type="text"
-//             className={styles["user-prompt-search"]}
-//             placeholder={Locale.Settings.Prompt.Modal.Search}
-//             value={searchInput}
-//             onInput={(e) => setSearchInput(e.currentTarget.value)}
-//           ></input>
-
-//           <div className={styles["user-prompt-list"]}>
-//             {prompts.map((v, _) => (
-//               <div className={styles["user-prompt-item"]} key={v.id ?? v.title}>
-//                 <div className={styles["user-prompt-header"]}>
-//                   <div className={styles["user-prompt-title"]}>{v.title}</div>
-//                   <div className={styles["user-prompt-content"] + " one-line"}>
-//                     {v.content}
-//                   </div>
-//                 </div>
-
-//                 <div className={styles["user-prompt-buttons"]}>
-//                   {v.isUser && (
-//                     <IconButton
-//                       icon={<ClearIcon />}
-//                       className={styles["user-prompt-button"]}
-//                       onClick={() => promptStore.remove(v.id!)}
-//                     />
-//                   )}
-//                   {v.isUser ? (
-//                     <IconButton
-//                       icon={<EditIcon />}
-//                       className={styles["user-prompt-button"]}
-//                       onClick={() => setEditingPromptId(v.id)}
-//                     />
-//                   ) : (
-//                     <IconButton
-//                       icon={<EyeIcon />}
-//                       className={styles["user-prompt-button"]}
-//                       onClick={() => setEditingPromptId(v.id)}
-//                     />
-//                   )}
-//                   <IconButton
-//                     icon={<CopyIcon />}
-//                     className={styles["user-prompt-button"]}
-//                     onClick={() => copyToClipboard(v.content)}
-//                   />
-//                 </div>
-//               </div>
-//             ))}
-//           </div>
-//         </div>
-//       </Modal>
-
-//       {editingPromptId !== undefined && (
-//         <EditPromptModal
-//           id={editingPromptId!}
-//           onClose={() => setEditingPromptId(undefined)}
-//         />
-//       )}
-//     </div>
-//   );
-// }
-
-function DangerItems() {
-  const chatStore = useChatStore();
-  const appConfig = useAppConfig();
-
-  return (
-    <List>
-      <ListItem
-        title={Locale.Settings.Danger.Reset.Title}
-        subTitle={Locale.Settings.Danger.Reset.SubTitle}
-      >
-        <IconButton
-          text={Locale.Settings.Danger.Reset.Action}
-          onClick={async () => {
-            if (await showConfirm(Locale.Settings.Danger.Reset.Confirm)) {
-              appConfig.reset();
-            }
-          }}
-          type="danger"
-        />
-      </ListItem>
-      <ListItem
-        title={Locale.Settings.Danger.Clear.Title}
-        subTitle={Locale.Settings.Danger.Clear.SubTitle}
-      >
-        <IconButton
-          text={Locale.Settings.Danger.Clear.Action}
-          onClick={async () => {
-            if (await showConfirm(Locale.Settings.Danger.Clear.Confirm)) {
-              chatStore.clearAllData();
-            }
-          }}
-          type="danger"
-        />
-      </ListItem>
-    </List>
-  );
-}
+import axios from "axios";
 
 function CheckButton() {
   const syncStore = useSyncStore();
@@ -494,41 +298,6 @@ function SyncItems() {
   return (
     <>
       <List>
-        {/* <ListItem
-          title={Locale.Settings.Sync.CloudState}
-          subTitle={
-            syncStore.lastProvider
-              ? `${new Date(syncStore.lastSyncTime).toLocaleString()} [${syncStore.lastProvider
-              }]`
-              : Locale.Settings.Sync.NotSyncYet
-          }
-        >
-          <div style={{ display: "flex" }}>
-            <IconButton
-              icon={<ConfigIcon />}
-              text={Locale.UI.Config}
-              onClick={() => {
-                setShowSyncConfigModal(true);
-              }}
-            />
-            {couldSync && (
-              <IconButton
-                icon={<ResetIcon />}
-                text={Locale.UI.Sync}
-                onClick={async () => {
-                  try {
-                    await syncStore.sync();
-                    showToast(Locale.Settings.Sync.Success);
-                  } catch (e) {
-                    showToast(Locale.Settings.Sync.Fail);
-                    console.error("[Sync]", e);
-                  }
-                }}
-              />
-            )}
-          </div>
-        </ListItem> */}
-
         <ListItem
           title={Locale.Settings.Sync.LocalState}
           subTitle={Locale.Settings.Sync.Overview(stateOverview)}
@@ -623,6 +392,53 @@ export function Settings() {
   const builtinCount = SearchService.count.builtin;
   const customCount = promptStore.getUserPrompts().length ?? 0;
   const [shouldShowPromptModal, setShowPromptModal] = useState(false);
+  const [apikey, setApikey] = useState("");
+
+  const handleApikeyChange = (value: any) => {
+    setApikey(value);
+  };
+
+  const saveApikey = async (apikey: any) => {
+    try {
+      const data = {
+        id: nanoid(),
+        apikey,
+      };
+      const response = await axios.post("/api/setting", data);
+
+      console.log("Response: ", response);
+    } catch (error) {
+      console.error("Error: ", error);
+    }
+  };
+
+  const checkApikey = () => {
+    if (!apikey) showToast("Please submit your Openai API Key");
+
+    fetch("https://api.openai.com/v1/engines", {
+      headers: {
+        Authorization: `Bearer ${apikey}`,
+      },
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("API key is valid.");
+          showToast("API key is valid.");
+          saveApikey(apikey);
+          accessStore.update((access) => (access.openaiApiKey = apikey));
+          setApikey("");
+        } else {
+          console.error("API key is invalid or expired.");
+          showToast("API key is invalid or expired.");
+          setApikey("");
+        }
+      })
+      .catch((error) => {
+        console.error("Error checking API key:", error);
+        showToast("Error checking API key");
+        setApikey("");
+      });
+  };
 
   const showUsage = accessStore.isAuthorized();
   useEffect(() => {
@@ -700,31 +516,6 @@ export function Settings() {
               </div>
             </Popover>
           </ListItem>
-
-          {/* <ListItem
-            title={Locale.Settings.Update.Version(currentVersion ?? "unknown")}
-            subTitle={
-              checkingUpdate
-                ? Locale.Settings.Update.IsChecking
-                : hasNewVersion
-                ? Locale.Settings.Update.FoundUpdate(remoteId ?? "ERROR")
-                : Locale.Settings.Update.IsLatest
-            }
-          >
-            {checkingUpdate ? (
-              <LoadingIcon />
-            ) : hasNewVersion ? (
-              <Link href={updateUrl} target="_blank" className="link">
-                {Locale.Settings.Update.GoToUpdate}
-              </Link>
-            ) : (
-              <IconButton
-                icon={<ResetIcon></ResetIcon>}
-                text={Locale.Settings.Update.CheckUpdate}
-                onClick={() => checkUpdate(true)}
-              />
-            )}
-          </ListItem> */}
 
           <ListItem title={Locale.Settings.SendKey}>
             <Select
@@ -810,60 +601,9 @@ export function Settings() {
               }
             ></input>
           </ListItem>
-
-          {/* <ListItem
-            title={Locale.Settings.SendPreviewBubble.Title}
-            subTitle={Locale.Settings.SendPreviewBubble.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.sendPreviewBubble}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.sendPreviewBubble = e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem> */}
         </List>
 
         <SyncItems />
-
-        {/* <List>
-          <ListItem
-            title={Locale.Settings.Mask.Splash.Title}
-            subTitle={Locale.Settings.Mask.Splash.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={!config.dontShowMaskSplashScreen}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                  (config.dontShowMaskSplashScreen =
-                    !e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-
-          <ListItem
-            title={Locale.Settings.Mask.Builtin.Title}
-            subTitle={Locale.Settings.Mask.Builtin.SubTitle}
-          >
-            <input
-              type="checkbox"
-              checked={config.hideBuiltinMasks}
-              onChange={(e) =>
-                updateConfig(
-                  (config) =>
-                    (config.hideBuiltinMasks = e.currentTarget.checked),
-                )
-              }
-            ></input>
-          </ListItem>
-        </List> */}
 
         <List>
           <ListItem
@@ -898,292 +638,31 @@ export function Settings() {
         </List>
 
         <List id={SlotID.CustomModel}>
-          {showAccessCode && (
-            <ListItem
-              title={Locale.Settings.Access.AccessCode.Title}
-              subTitle={Locale.Settings.Access.AccessCode.SubTitle}
-            >
-              <PasswordInput
-                value={accessStore.accessCode}
-                type="text"
-                placeholder={Locale.Settings.Access.AccessCode.Placeholder}
-                onChange={(e) => {
-                  accessStore.update(
-                    (access) => (access.accessCode = e.currentTarget.value),
-                  );
-                }}
-              />
-            </ListItem>
-          )}
-
           {!accessStore.hideUserApiKey && (
-            <>
-              {
-                // Conditionally render the following ListItem based on clientConfig.isApp
-                !clientConfig?.isApp && ( // only show if isApp is false
-                  <ListItem
-                    title={Locale.Settings.Access.CustomEndpoint.Title}
-                    subTitle={Locale.Settings.Access.CustomEndpoint.SubTitle}
-                  >
-                    <input
-                      type="checkbox"
-                      checked={accessStore.useCustomConfig}
-                      onChange={(e) =>
-                        accessStore.update(
-                          (access) =>
-                            (access.useCustomConfig = e.currentTarget.checked),
-                        )
-                      }
-                    ></input>
-                  </ListItem>
-                )
-              }
-              {accessStore.useCustomConfig && (
-                <>
-                  <ListItem
-                    title={Locale.Settings.Access.Provider.Title}
-                    subTitle={Locale.Settings.Access.Provider.SubTitle}
-                  >
-                    <Select
-                      value={accessStore.provider}
-                      onChange={(e) => {
-                        accessStore.update(
-                          (access) =>
-                          (access.provider = e.target
-                            .value as ServiceProvider),
-                        );
-                      }}
-                    >
-                      {Object.entries(ServiceProvider).map(([k, v]) => (
-                        <option value={v} key={k}>
-                          {k}
-                        </option>
-                      ))}
-                    </Select>
-                  </ListItem>
-
-                  {accessStore.provider === "OpenAI" ? (
-                    <>
-                      {/* <ListItem
-                        title={Locale.Settings.Access.OpenAI.Endpoint.Title}
-                        subTitle={
-                          Locale.Settings.Access.OpenAI.Endpoint.SubTitle
-                        }
-                      >
-                        <input
-                          type="text"
-                          value={accessStore.openaiUrl}
-                          placeholder={OPENAI_BASE_URL}
-                          onChange={(e) =>
-                            accessStore.update(
-                              (access) =>
-                                (access.openaiUrl = e.currentTarget.value),
-                            )
-                          }
-                        ></input>
-                      </ListItem> */}
-                      <ListItem
-                        title={Locale.Settings.Access.OpenAI.ApiKey.Title}
-                        subTitle={Locale.Settings.Access.OpenAI.ApiKey.SubTitle}
-                      >
-                        <PasswordInput
-                          value={accessStore.openaiApiKey}
-                          type="text"
-                          placeholder={
-                            Locale.Settings.Access.OpenAI.ApiKey.Placeholder
-                          }
-                          onChange={(e) => {
-                            accessStore.update(
-                              (access) =>
-                                (access.openaiApiKey = e.currentTarget.value),
-                            );
-                          }}
-                        />
-                      </ListItem>
-                    </>
-                  ) : accessStore.provider === "Azure" ? (
-                    <>
-                      {/* <ListItem
-                        title={Locale.Settings.Access.Azure.Endpoint.Title}
-                        subTitle={
-                          Locale.Settings.Access.Azure.Endpoint.SubTitle +
-                          Azure.ExampleEndpoint
-                        }
-                      >
-                        <input
-                          type="text"
-                          value={accessStore.azureUrl}
-                          placeholder={Azure.ExampleEndpoint}
-                          onChange={(e) =>
-                            accessStore.update(
-                              (access) =>
-                                (access.azureUrl = e.currentTarget.value),
-                            )
-                          }
-                        ></input>
-                      </ListItem> */}
-                      <ListItem
-                        title={Locale.Settings.Access.Azure.ApiKey.Title}
-                        subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
-                      >
-                        <PasswordInput
-                          value={accessStore.azureApiKey}
-                          type="text"
-                          placeholder={
-                            Locale.Settings.Access.Azure.ApiKey.Placeholder
-                          }
-                          onChange={(e) => {
-                            accessStore.update(
-                              (access) =>
-                                (access.azureApiKey = e.currentTarget.value),
-                            );
-                          }}
-                        />
-                      </ListItem>
-                      {/* <ListItem
-                        title={Locale.Settings.Access.Azure.ApiVerion.Title}
-                        subTitle={
-                          Locale.Settings.Access.Azure.ApiVerion.SubTitle
-                        }
-                      >
-                        <input
-                          type="text"
-                          value={accessStore.azureApiVersion}
-                          placeholder="2023-08-01-preview"
-                          onChange={(e) =>
-                            accessStore.update(
-                              (access) =>
-                              (access.azureApiVersion =
-                                e.currentTarget.value),
-                            )
-                          }
-                        ></input>
-                      </ListItem> */}
-                    </>
-                  ) : accessStore.provider === "Google" ? (
-                    <>
-                      {/* <ListItem
-                        title={Locale.Settings.Access.Google.Endpoint.Title}
-                        subTitle={
-                          Locale.Settings.Access.Google.Endpoint.SubTitle +
-                          Google.ExampleEndpoint
-                        }
-                      >
-                        <input
-                          type="text"
-                          value={accessStore.googleUrl}
-                          placeholder={Google.ExampleEndpoint}
-                          onChange={(e) =>
-                            accessStore.update(
-                              (access) =>
-                                (access.googleUrl = e.currentTarget.value),
-                            )
-                          }
-                        ></input>
-                      </ListItem> */}
-                      <ListItem
-                        title={Locale.Settings.Access.Azure.ApiKey.Title}
-                        subTitle={Locale.Settings.Access.Azure.ApiKey.SubTitle}
-                      >
-                        <PasswordInput
-                          value={accessStore.googleApiKey}
-                          type="text"
-                          placeholder={
-                            Locale.Settings.Access.Google.ApiKey.Placeholder
-                          }
-                          onChange={(e) => {
-                            accessStore.update(
-                              (access) =>
-                                (access.googleApiKey = e.currentTarget.value),
-                            );
-                          }}
-                        />
-                      </ListItem>
-                      {/* <ListItem
-                        title={Locale.Settings.Access.Google.ApiVerion.Title}
-                        subTitle={
-                          Locale.Settings.Access.Google.ApiVerion.SubTitle
-                        }
-                      >
-                        <input
-                          type="text"
-                          value={accessStore.googleApiVersion}
-                          placeholder="2023-08-01-preview"
-                          onChange={(e) =>
-                            accessStore.update(
-                              (access) =>
-                              (access.googleApiVersion =
-                                e.currentTarget.value),
-                            )
-                          }
-                        ></input>
-                      </ListItem> */}
-                    </>
-                  ) : null}
-                </>
-              )}
-            </>
-          )}
-
-          {!shouldHideBalanceQuery && !clientConfig?.isApp ? (
             <ListItem
-              title={Locale.Settings.Usage.Title}
-              subTitle={
-                showUsage
-                  ? loadingUsage
-                    ? Locale.Settings.Usage.IsChecking
-                    : Locale.Settings.Usage.SubTitle(
-                      usage?.used ?? "[?]",
-                      usage?.subscription ?? "[?]",
-                    )
-                  : Locale.Settings.Usage.NoAccess
-              }
+              title={Locale.Settings.Access.OpenAI.ApiKey.Title}
+              subTitle={Locale.Settings.Access.OpenAI.ApiKey.SubTitle}
             >
-              {!showUsage || loadingUsage ? (
-                <div />
-              ) : (
-                <IconButton
-                  icon={<ResetIcon></ResetIcon>}
-                  text={Locale.Settings.Usage.Check}
-                  onClick={() => checkUsage(true)}
+              <div style={{ display: "flex", justifyContent: "flex-end" }}>
+                <PasswordInput
+                  value={apikey}
+                  type="text"
+                  placeholder={Locale.Settings.Access.OpenAI.ApiKey.Placeholder}
+                  onChange={(e) => handleApikeyChange(e.currentTarget.value)}
                 />
-              )}
+                <IconButton
+                  icon={<CheckIcon />}
+                  text="Check"
+                  onClick={() => checkApikey()}
+                />
+              </div>
             </ListItem>
-          ) : null}
-
-          {/* <ListItem
-            title={Locale.Settings.Access.CustomModel.Title}
-            subTitle={Locale.Settings.Access.CustomModel.SubTitle}
-          >
-            <input
-              type="text"
-              value={config.customModels}
-              placeholder="model1,model2,model3"
-              onChange={(e) =>
-                config.update(
-                  (config) => (config.customModels = e.currentTarget.value),
-                )
-              }
-            ></input>
-          </ListItem> */}
+          )}
         </List>
-
-        {/* <List>
-          <ModelConfigList
-            modelConfig={config.modelConfig}
-            updateConfig={(updater) => {
-              const modelConfig = { ...config.modelConfig };
-              updater(modelConfig);
-              config.update((config) => (config.modelConfig = modelConfig));
-            }}
-          />
-        </List> */}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
         )}
-
-        {/* <DangerItems /> */}
       </div>
     </ErrorBoundary>
   );

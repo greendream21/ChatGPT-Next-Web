@@ -501,35 +501,6 @@ export function ChatActions(props: {
         icon={<PromptIcon />}
       />
 
-      {/* <ChatAction
-        onClick={() => {
-          navigate(Path.Masks);
-        }}
-        text={Locale.Chat.InputActions.Masks}
-        icon={<MaskIcon />}
-      />
-
-      <ChatAction
-        text={Locale.Chat.InputActions.Clear}
-        icon={<BreakIcon />}
-        onClick={() => {
-          chatStore.updateCurrentSession((session) => {
-            if (session.clearContextIndex === session.messages.length) {
-              session.clearContextIndex = undefined;
-            } else {
-              session.clearContextIndex = session.messages.length;
-              session.memoryPrompt = ""; // will clear memory
-            }
-          });
-        }}
-      /> */}
-
-      {/* <ChatAction
-        onClick={() => setShowModelSelector(true)}
-        text={currentModel}
-        icon={<RobotIcon />}
-      /> */}
-
       {showModelSelector && (
         <Selector
           defaultSelectedValue={currentModel}
@@ -601,14 +572,6 @@ export function EditMessageModal(props: { onClose: () => void }) {
             ></input>
           </ListItem>
         </List>
-        {/* <ContextPrompts
-          context={messages}
-          updateContext={(updater) => {
-            const newMessages = messages.slice();
-            updater(newMessages);
-            setMessages(newMessages);
-          }}
-        /> */}
       </Modal>
     </div>
   );
@@ -735,7 +698,11 @@ function _Chat() {
   };
 
   const doSubmit = async (userInput: string) => {
-    if (typeof limit === "undefined") return;
+    if (typeof limit === "undefined") {
+      getData();
+
+      return;
+    }
 
     if (limit === 0) {
       showToast("Free tier limit!");
@@ -748,6 +715,8 @@ function _Chat() {
       userId,
       amount: freeTierLimit,
     };
+
+    console.log("Free Tier Limit: ", freeTierLimit);
 
     updateData(agentData);
 
@@ -1142,6 +1111,8 @@ function _Chat() {
           <Select
             value={currentModel}
             onChange={(e) => {
+              console.log("ChatStore: ", chatStore);
+
               console.log("Model", e.target.value);
               chatStore.updateCurrentSession((session) => {
                 session.mask.modelConfig.model = e.target.value as ModelType;

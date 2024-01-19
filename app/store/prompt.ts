@@ -7,9 +7,9 @@ import { createPersistStore } from "../utils/store";
 export interface Prompt {
   id: string;
   isUser?: boolean;
+  userEmail: string;
   title: string;
   content: string;
-  createdAt: number;
 }
 
 export const SearchService = {
@@ -59,7 +59,6 @@ export const usePromptStore = createPersistStore(
       const prompts = get().prompts;
       prompt.id = nanoid();
       prompt.isUser = true;
-      prompt.createdAt = Date.now();
       prompts[prompt.id] = prompt;
 
       set(() => ({
@@ -101,9 +100,6 @@ export const usePromptStore = createPersistStore(
 
     getUserPrompts() {
       const userPrompts = Object.values(get().prompts ?? {});
-      userPrompts.sort((a, b) =>
-        b.id && a.id ? b.createdAt - a.createdAt : 0,
-      );
       return userPrompts;
     },
 
@@ -165,7 +161,6 @@ export const usePromptStore = createPersistStore(
                   id: nanoid(),
                   title,
                   content,
-                  createdAt: Date.now(),
                 }) as Prompt,
             );
           });

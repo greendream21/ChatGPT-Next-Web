@@ -1,14 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 
-import { createPrompt, getPrompt } from "./handlers";
-export async function GET() {
-  const data = await getPrompt();
+import Prompt from "@/app/models/promptModel";
+import dbConnect from "@/app/lib/dbConnect";
 
-  let json_response = {
-    data: data,
-    status: true,
-  };
-  return NextResponse.json(json_response);
+export async function GET() {
+  try {
+    await dbConnect();
+
+    const response = await Prompt.find({});
+
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("Errors: ", error);
+
+    return NextResponse.json(error);
+  }
 }
 
 export async function POST(request: NextRequest) {
@@ -22,9 +28,49 @@ export async function POST(request: NextRequest) {
     isUser,
   };
 
-  await createPrompt(newData);
-  let json_response = {
-    status: true,
-  };
-  return NextResponse.json(json_response);
+  try {
+    await dbConnect();
+
+    const data = new Prompt(newData);
+
+    const checkable = await Prompt.findOne({ id: newData.id });
+
+    if (checkable) {
+      const response = await Prompt.updateOne(
+        { id: newData.id },
+        { $set: { title: newData.title, content: newData.content } },
+      );
+
+      return NextResponse.json(response);
+    } else {
+      const response = await data.save();
+
+      return NextResponse.json(response);
+    }
+  } catch (error) {
+    console.error("Error: ", error);
+
+    return NextResponse.json(error);
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  const { id } = await req.json();
+
+  try {
+    await dbConnect();
+
+    const checkable = await Prompt.findOne({ id });
+
+    if (checkable) {
+      const response = await Prompt.deleteOne({ id });
+
+      console.log("Deleted: ", response.deleteCount);
+      return NextResponse.json(response);
+    }
+  } catch (error) {
+    console.error("Errors: ", error);
+
+    return NextResponse.json(error);
+  }
 }
