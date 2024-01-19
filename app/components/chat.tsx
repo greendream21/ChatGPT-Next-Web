@@ -635,8 +635,6 @@ function _Chat() {
   useEffect(measure, [userInput]);
 
   const updateData = async (agentData: any) => {
-    if (!userId) return;
-
     try {
       await axios.post("/api/user", agentData);
 
