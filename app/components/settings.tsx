@@ -637,7 +637,7 @@ export function Settings() {
           </ListItem>
         </List>
 
-        <List id={SlotID.CustomModel}>
+        {/* <List id={SlotID.CustomModel}>
           {!accessStore.hideUserApiKey && (
             <ListItem
               title={Locale.Settings.Access.OpenAI.ApiKey.Title}
@@ -658,7 +658,7 @@ export function Settings() {
               </div>
             </ListItem>
           )}
-        </List>
+        </List> */}
 
         {shouldShowPromptModal && (
           <UserPromptModal onClose={() => setShowPromptModal(false)} />
