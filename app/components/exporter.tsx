@@ -112,8 +112,9 @@ function Steps<
           return (
             <div
               key={i}
-              className={`${styles["step"]} ${styles[i <= props.index ? "step-finished" : ""]
-                } ${i === props.index && styles["step-current"]} clickable`}
+              className={`${styles["step"]} ${
+                styles[i <= props.index ? "step-finished" : ""]
+              } ${i === props.index && styles["step-current"]} clickable`}
               onClick={() => {
                 props.onStepChange?.(i);
               }}
@@ -305,12 +306,12 @@ export function PreviewActions(props: {
   const onRenderMsgs = (msgs: ChatMessage[]) => {
     setShouldExport(false);
 
-    var api: ClientApi;
-    if (config.modelConfig.model === "gemini-pro") {
-      api = new ClientApi(ModelProvider.GeminiPro);
-    } else {
-      api = new ClientApi(ModelProvider.GPT);
-    }
+    var api: ClientApi = new ClientApi(ModelProvider.GPT);
+    // if (config.modelConfig.model === "gemini-pro") {
+    //   api = new ClientApi(ModelProvider.GeminiPro);
+    // } else {
+    //   api = new ClientApi(ModelProvider.GPT);
+    // }
 
     api
       .share(msgs)
