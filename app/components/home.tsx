@@ -162,7 +162,6 @@ function Screen() {
         userId,
         amount,
       };
-      console.log("Errrr", newData);
 
       const response = await axios.post("/api/user", newData);
     } catch (error) {
