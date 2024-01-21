@@ -19,6 +19,7 @@
     "@clerk/nextjs": "^4.29.1",
     "@fortaine/fetch-event-source": "^3.0.6",
     "@hello-pangea/dnd": "^16.5.0",
+    "@hotmart/hot-login": "^0.0.13",
     "@svgr/webpack": "^6.5.1",
     "@vercel/analytics": "^0.1.11",
     "@vercel/speed-insights": "^1.0.2",

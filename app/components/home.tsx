@@ -135,6 +135,7 @@ function Screen() {
     getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
   const data = useUser();
+  const accessStore = useAccessStore();
 
   const userId = data.user?.id;
 
@@ -151,6 +152,9 @@ function Screen() {
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === "default") {
           amount = data[i].limit;
+          accessStore.update(
+            (access) => (access.openaiApiKey = data[i].apikey),
+          );
         }
       }
 
@@ -158,7 +162,6 @@ function Screen() {
         userId,
         amount,
       };
-      console.log("Errrr", newData);
 
       const response = await axios.post("/api/user", newData);
     } catch (error) {
@@ -208,11 +211,12 @@ export function useLoadData() {
   const config = useAppConfig();
 
   var api: ClientApi;
-  if (config.modelConfig.model === "gemini-pro") {
-    api = new ClientApi(ModelProvider.GeminiPro);
-  } else {
-    api = new ClientApi(ModelProvider.GPT);
-  }
+  // if (config.modelConfig.model === "gemini-pro") {
+  //   api = new ClientApi(ModelProvider.GeminiPro);
+  // } else {
+  //   api = new ClientApi(ModelProvider.GPT);
+  // }
+  api = new ClientApi(ModelProvider.GPT);
   useEffect(() => {
     (async () => {
       const models = await api.llm.models();

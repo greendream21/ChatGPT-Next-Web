@@ -37,6 +37,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
+import PaymentPage from "./payment";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -150,6 +151,8 @@ export function SideBar(props: { className?: string }) {
 
   const [showPrompt, setShowPrompt] = useState(false);
 
+  const [isPaymentModal, setIsPaymentModal] = useState(false);
+
   useHotKey();
 
   return (
@@ -237,9 +240,11 @@ export function SideBar(props: { className?: string }) {
             </Link>
           </div>
           <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-              <IconButton icon={<ShopIcon />} shadow />
-            </a>
+            <IconButton
+              icon={<ShopIcon />}
+              onClick={() => setIsPaymentModal(true)}
+              shadow
+            />
           </div>
         </div>
         <div>
@@ -267,6 +272,14 @@ export function SideBar(props: { className?: string }) {
       >
         <DragIcon />
       </div>
+
+      {isPaymentModal && (
+        <PaymentPage
+          onClose={() => {
+            setIsPaymentModal(false);
+          }}
+        />
+      )}
     </div>
   );
 }
