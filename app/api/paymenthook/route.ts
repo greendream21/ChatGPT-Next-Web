@@ -4,5 +4,7 @@ export async function POST(req: NextRequest) {
   const data = await req.json();
 
   console.log("data", data);
+  console.log("Header", req.headers);
+
   return NextResponse.json(data);
 }
