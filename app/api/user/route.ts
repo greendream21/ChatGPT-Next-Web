@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import dbConnect from "@/app/lib/dbConnect";
 import User from "@/app/models/userModel";
+import Setting from "@/app/models/settingModel";
 
 export async function GET() {
   try {
@@ -18,22 +19,39 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId, amount } = await request.json();
-
-  const newData = {
-    userId,
-    amount: typeof amount === "undefined" ? 20 : amount,
-  };
+  const { userId, email, amount } = await request.json();
 
   try {
     await dbConnect();
+
+    const { limit } = await Setting.findOne({ id: "default" });
+
+    const newData = {
+      userId,
+      email,
+      amount: limit,
+    };
+
+    const updateData = {
+      userId,
+      amount,
+    };
 
     const data = new User(newData);
 
     const checkAvailable = await User.findOne({ userId });
 
     if (checkAvailable) {
-      return NextResponse.json(checkAvailable);
+      if (!updateData.amount) return NextResponse.json("None!");
+
+      const response = await User.updateOne(
+        { userId },
+        {
+          $set: { amount: updateData.amount },
+        },
+      );
+
+      return NextResponse.json(response);
     } else {
       const response = await data.save();
 

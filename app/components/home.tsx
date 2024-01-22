@@ -138,6 +138,7 @@ function Screen() {
   const accessStore = useAccessStore();
 
   const userId = data.user?.id;
+  const email = data.user?.emailAddresses[0].emailAddress;
 
   useEffect(() => {
     loadAsyncGoogleFont();
@@ -147,11 +148,9 @@ function Screen() {
     try {
       const { data } = await axios.get("/api/setting");
 
-      let amount: any;
-
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === "default") {
-          amount = data[i].limit;
+          // amount = data[i].limit;
           accessStore.update(
             (access) => (access.openaiApiKey = data[i].apikey),
           );
@@ -160,7 +159,7 @@ function Screen() {
 
       const newData = {
         userId,
-        amount,
+        email,
       };
 
       const response = await axios.post("/api/user", newData);
