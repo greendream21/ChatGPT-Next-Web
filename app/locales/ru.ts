@@ -159,6 +159,7 @@ const ru: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Общий",
     DefaultTopic: "Новый разговор",
     BotHello: "Здравствуйте! Как я могу вам помочь сегодня?",
     Error: "Что-то пошло не так. Пожалуйста, попробуйте еще раз позже.",
@@ -206,7 +207,8 @@ const ru: PartialLocaleType = {
     },
     EditModal: {
       Title: (readonly: boolean) =>
-        `Редактирование шаблона подсказки ${readonly ? "(только для чтения)" : ""
+        `Редактирование шаблона подсказки ${
+          readonly ? "(только для чтения)" : ""
         }`,
       Download: "Скачать",
       Clone: "Клонировать",

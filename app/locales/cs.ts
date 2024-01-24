@@ -157,6 +157,7 @@ const cs: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Generale",
     DefaultTopic: "Nová konverzace",
     BotHello: "Ahoj! Jak mohu dnes pomoci?",
     Error: "Něco se pokazilo, zkuste to prosím později.",

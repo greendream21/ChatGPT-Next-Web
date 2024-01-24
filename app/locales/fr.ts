@@ -212,6 +212,7 @@ const fr: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Générale",
     DefaultTopic: "Nouvelle conversation",
     BotHello: "Bonjour ! Comment puis-je vous aider aujourd'hui ?",
     Error: "Quelque chose s'est mal passé, veuillez réessayer plus tard.",

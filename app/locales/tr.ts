@@ -160,6 +160,7 @@ const tr: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Genel",
     DefaultTopic: "Yeni Konuşma",
     BotHello: "Merhaba! Size bugün nasıl yardımcı olabilirim?",
     Error: "Bir şeyler yanlış gitti. Lütfen daha sonra tekrar deneyiniz.",

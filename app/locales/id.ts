@@ -275,6 +275,7 @@ const id: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Umum",
     DefaultTopic: "Percakapan Baru",
     BotHello: "Halo! Bagaimana saya bisa membantu Anda hari ini?",
     Error: "Terjadi kesalahan, silakan coba lagi nanti.",
@@ -371,7 +372,7 @@ const id: PartialLocaleType = {
   },
   Exporter: {
     Description: {
-      Title: "Hanya pesan setelah menghapus konteks yang akan ditampilkan"
+      Title: "Hanya pesan setelah menghapus konteks yang akan ditampilkan",
     },
     Model: "Model",
     Messages: "Pesan",

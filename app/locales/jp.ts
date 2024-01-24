@@ -180,6 +180,7 @@ const jp: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "一般的な",
     DefaultTopic: "新しいチャット",
     BotHello: "何かお手伝いできることはありますか",
     Error: "エラーが発生しました。しばらくしてからやり直してください。",

@@ -157,6 +157,7 @@ const de: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Algemeen",
     DefaultTopic: "Neues Gespräch",
     BotHello: "Hallo! Wie kann ich Ihnen heute helfen?",
     Error:
