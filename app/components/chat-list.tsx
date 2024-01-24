@@ -1,5 +1,9 @@
 import DeleteIcon from "../icons/delete.svg";
-import BotIcon from "../icons/bot.svg";
+import DownIcon from "../icons/down.svg";
+import AddIcon from "../icons/add.svg";
+import DragIcon from "../icons/drag.svg";
+
+import { Accordion, AccordionItem } from "@szhsin/react-accordion";
 
 import styles from "./home.module.scss";
 import {
@@ -9,7 +13,7 @@ import {
   OnDragEndResponder,
 } from "@hello-pangea/dnd";
 
-import { useChatStore } from "../store";
+import { useAppConfig, useChatStore } from "../store";
 
 import Locale from "../locales";
 import { Link, useNavigate } from "react-router-dom";
@@ -24,8 +28,8 @@ export function ChatItem(props: {
   onClick?: () => void;
   onDelete?: () => void;
   title: string;
-  count: number;
-  time: string;
+  // count: number;
+  // time: string;
   selected: boolean;
   id: string;
   index: number;
@@ -54,10 +58,11 @@ export function ChatItem(props: {
           }}
           {...provided.draggableProps}
           {...provided.dragHandleProps}
-          title={`${props.title}\n${Locale.ChatItem.ChatItemCount(
-            props.count,
-          )}`}
+          // title={`${props.title}\n${Locale.ChatItem.ChatItemCount(
+          //   props.count,
+          // )}`}
         >
+          <DragIcon />
           {props.narrow ? (
             <div className={styles["chat-item-narrow"]}>
               <div className={styles["chat-item-avatar"] + " no-dark"}>
@@ -66,19 +71,19 @@ export function ChatItem(props: {
                   model={props.mask.modelConfig.model}
                 />
               </div>
-              <div className={styles["chat-item-narrow-count"]}>
+              {/* <div className={styles["chat-item-narrow-count"]}>
                 {props.count}
-              </div>
+              </div> */}
             </div>
           ) : (
             <>
               <div className={styles["chat-item-title"]}>{props.title}</div>
-              <div className={styles["chat-item-info"]}>
+              {/* <div className={styles["chat-item-info"]}>
                 <div className={styles["chat-item-count"]}>
                   {Locale.ChatItem.ChatItemCount(props.count)}
                 </div>
                 <div className={styles["chat-item-date"]}>{props.time}</div>
-              </div>
+              </div> */}
             </>
           )}
 
@@ -110,6 +115,7 @@ export function ChatList(props: { narrow?: boolean }) {
   const chatStore = useChatStore();
   const navigate = useNavigate();
   const isMobileScreen = useMobileScreen();
+  const config = useAppConfig();
 
   const onDragEnd: OnDragEndResponder = (result) => {
     const { destination, source } = result;
@@ -136,32 +142,63 @@ export function ChatList(props: { narrow?: boolean }) {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            {sessions.map((item, i) => (
-              <ChatItem
-                title={item.topic}
-                time={new Date(item.lastUpdate).toLocaleString()}
-                count={item.messages.length}
-                key={item.id}
-                id={item.id}
-                index={i}
-                selected={i === selectedIndex}
-                onClick={() => {
-                  navigate(Path.Chat);
-                  selectSession(i);
-                }}
-                onDelete={async () => {
-                  if (
-                    (!props.narrow && !isMobileScreen) ||
-                    (await showConfirm(Locale.Home.DeleteChat))
-                  ) {
-                    chatStore.deleteSession(i);
+            <Accordion allowMultiple>
+              {sessions.map((item, i) => (
+                <AccordionItem
+                  className={styles["accordionItem"]}
+                  header={
+                    <div className={styles["accordion-sub"]}>
+                      <div className={styles["accordion-title"]}>
+                        <div className={styles["accordion-title-icon"]}>
+                          <DownIcon />
+                        </div>
+                        <span>{item.topic}</span>
+                      </div>
+                      <div
+                        className={styles["accordion-title-icon"]}
+                        onClick={() => {
+                          if (config.dontShowMaskSplashScreen) {
+                            chatStore.newSession();
+                            navigate(Path.Chat);
+                          } else {
+                            navigate(Path.NewChat);
+                          }
+                        }}
+                      >
+                        <AddIcon />
+                      </div>
+                    </div>
                   }
-                }}
-                narrow={props.narrow}
-                mask={item.mask}
-              />
-            ))}
-            {provided.placeholder}
+                  key={item.id}
+                  initialEntered
+                >
+                  <ChatItem
+                    title={item.topic}
+                    // time={new Date(item.lastUpdate).toLocaleString()}
+                    // count={item.messages.length}
+                    key={item.id}
+                    id={item.id}
+                    index={i}
+                    selected={i === selectedIndex}
+                    onClick={() => {
+                      navigate(Path.Chat);
+                      selectSession(i);
+                    }}
+                    onDelete={async () => {
+                      if (
+                        (!props.narrow && !isMobileScreen) ||
+                        (await showConfirm(Locale.Home.DeleteChat))
+                      ) {
+                        chatStore.deleteSession(i);
+                      }
+                    }}
+                    narrow={props.narrow}
+                    mask={item.mask}
+                  />
+                </AccordionItem>
+              ))}
+              {provided.placeholder}
+            </Accordion>
           </div>
         )}
       </Droppable>
