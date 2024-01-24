@@ -219,7 +219,9 @@ export function SideBar(props: { className?: string }) {
           }
         }}
       >
-        <ChatList narrow={shouldNarrow} />
+        <div className="accordion">
+          <ChatList narrow={shouldNarrow} />
+        </div>
       </div>
 
       <div className={styles["sidebar-tail"]}>

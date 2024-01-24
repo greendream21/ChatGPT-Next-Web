@@ -163,9 +163,46 @@
   overflow-x: hidden;
 }
 
+.accordionItem {
+  button {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 5px;
+    color: var(--black);
+    background-color: var(--white);
+  }
+}
+
+.accordion-sub {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.accordion-title {
+  font-size: 14px;
+  font-weight: bolder;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.accordion-title-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .chat-item {
-  padding: 10px 14px;
-  background-color: var(--white);
+  padding: 5px 10px;
+  // background-color: var(--white);
   border-radius: 10px;
   margin-bottom: 10px;
   box-shadow: var(--card-shadow);
@@ -175,6 +212,10 @@
   border: 2px solid transparent;
   position: relative;
   content-visibility: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
 }
 
 .chat-item:hover {
@@ -186,8 +227,7 @@
 }
 
 .chat-item-title {
-  font-size: 14px;
-  font-weight: bolder;
+  font-size: 12px;
   display: block;
   width: calc(100% - 15px);
   overflow: hidden;
