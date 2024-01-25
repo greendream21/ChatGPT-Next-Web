@@ -69,7 +69,7 @@ function createEmptySession(): ChatSession {
   return {
     id: nanoid(),
     groupId: nanoid(),
-    groupTitle: DEFAULT_GROUP_TITLE,
+    groupTitle: "",
     topic: DEFAULT_TOPIC,
     memoryPrompt: "",
     messages: [],
@@ -198,33 +198,18 @@ export const useChatStore = createPersistStore(
         }));
       },
 
-      newGroupSession(mask?: Mask) {
+      newGroupSession(group: any) {
         const session = createEmptySession();
-
-        if (mask) {
-          const config = useAppConfig.getState();
-          const globalModelConfig = config.modelConfig;
-
-          session.mask = {
-            ...mask,
-            modelConfig: {
-              ...globalModelConfig,
-              ...mask.modelConfig,
-            },
-          };
-          session.topic = mask.name;
-        }
-
-        console.log("Sucees: ", mask);
 
         set((state) => ({
           currentSessionIndex: 0,
           sessions: [session].concat(state.sessions),
         }));
 
-        // get().updateCurrentSession((session) => {
-        //   session.groupId =
-        // })
+        get().updateCurrentSession((session) => {
+          session.groupId = group.groupId;
+          session.groupTitle = group.groupTitle;
+        });
       },
 
       nextSession(delta: number) {

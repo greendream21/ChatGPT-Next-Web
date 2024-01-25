@@ -190,14 +190,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  border: none;
+  background: transparent;
+  text-align: start;
 }
 
 .accordion-title-icon {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
