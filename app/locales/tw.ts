@@ -152,6 +152,7 @@ const tw: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "一般的",
     DefaultTopic: "新的對話",
     BotHello: "請問需要我的協助嗎？",
     Error: "出錯了，請稍後再嘗試",

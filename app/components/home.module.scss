@@ -164,6 +164,7 @@
 }
 
 .accordionItem {
+  margin: 20px 0px;
   button {
     width: 100%;
     background: transparent;
@@ -189,14 +190,14 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  display: flex;
-  align-items: center;
-  gap: 4px;
+  border: none;
+  background: transparent;
+  text-align: start;
 }
 
 .accordion-title-icon {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
 }
 
@@ -204,12 +205,12 @@
   padding: 5px 10px;
   // background-color: var(--white);
   border-radius: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 3px;
   box-shadow: var(--card-shadow);
   transition: background-color 0.3s ease;
   cursor: pointer;
   user-select: none;
-  border: 2px solid transparent;
+  border: 2px solid var(--hover-color);
   position: relative;
   content-visibility: auto;
   display: flex;

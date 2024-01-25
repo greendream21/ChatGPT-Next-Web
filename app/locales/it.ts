@@ -158,6 +158,7 @@ const it: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Generale",
     DefaultTopic: "Nuova conversazione",
     BotHello: "Ciao, come posso aiutarti oggi?",
     Error: "Qualcosa è andato storto, riprova più tardi.",

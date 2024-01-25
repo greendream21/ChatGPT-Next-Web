@@ -360,6 +360,7 @@ const cn = {
     },
   },
   Store: {
+    DefaultGroupTitle: "一般的",
     DefaultTopic: "新的聊天",
     BotHello: "有什么可以帮你的吗",
     Error: "出错了，稍后重试吧",
@@ -472,8 +473,8 @@ const cn = {
 
 type DeepPartial<T> = T extends object
   ? {
-    [P in keyof T]?: DeepPartial<T[P]>;
-  }
+      [P in keyof T]?: DeepPartial<T[P]>;
+    }
   : T;
 
 export type LocaleType = typeof cn;

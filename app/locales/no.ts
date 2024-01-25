@@ -130,6 +130,7 @@ const no: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Generell",
     DefaultTopic: "Ny samtale",
     BotHello: "Hei! Hva kan jeg hjelpe deg med i dag?",
     Error: "Noe gikk galt, vennligst prøv igjen senere.",

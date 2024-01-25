@@ -46,7 +46,8 @@ export interface ChatStat {
 export interface ChatSession {
   id: string;
   topic: string;
-
+  groupId: string;
+  groupTitle: string;
   memoryPrompt: string;
   messages: ChatMessage[];
   stat: ChatStat;
@@ -58,6 +59,7 @@ export interface ChatSession {
 }
 
 export const DEFAULT_TOPIC = Locale.Store.DefaultTopic;
+export const DEFAULT_GROUP_TITLE = Locale.Store.DefaultGroupTitle;
 export const BOT_HELLO: ChatMessage = createMessage({
   role: "assistant",
   content: Locale.Store.BotHello,
@@ -66,6 +68,8 @@ export const BOT_HELLO: ChatMessage = createMessage({
 function createEmptySession(): ChatSession {
   return {
     id: nanoid(),
+    groupId: nanoid(),
+    groupTitle: "",
     topic: DEFAULT_TOPIC,
     memoryPrompt: "",
     messages: [],
@@ -192,6 +196,20 @@ export const useChatStore = createPersistStore(
           currentSessionIndex: 0,
           sessions: [session].concat(state.sessions),
         }));
+      },
+
+      newGroupSession(group: any) {
+        const session = createEmptySession();
+
+        set((state) => ({
+          currentSessionIndex: 0,
+          sessions: [session].concat(state.sessions),
+        }));
+
+        get().updateCurrentSession((session) => {
+          session.groupId = group.groupId;
+          session.groupTitle = group.groupTitle;
+        });
       },
 
       nextSession(delta: number) {

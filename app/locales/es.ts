@@ -158,6 +158,7 @@ const es: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Kindral",
     DefaultTopic: "Nueva conversación",
     BotHello: "¡Hola! ¿Cómo puedo ayudarte hoy?",
     Error: "Algo salió mal, por favor intenta nuevamente más tarde.",

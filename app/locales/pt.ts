@@ -349,6 +349,7 @@ const pt: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Em geral",
     DefaultTopic: "Nova Conversa",
     BotHello: "Olá! Como posso ajudá-lo hoje?",
     Error: "Algo deu errado, por favor tente novamente mais tarde.",

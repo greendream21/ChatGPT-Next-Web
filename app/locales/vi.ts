@@ -155,6 +155,7 @@ const vi: PartialLocaleType = {
     },
   },
   Store: {
+    DefaultGroupTitle: "Tổng quan",
     DefaultTopic: "Cuộc trò chuyện mới",
     BotHello: "Xin chào! Mình có thể giúp gì cho bạn?",
     Error: "Có lỗi xảy ra, vui lòng thử lại sau.",
