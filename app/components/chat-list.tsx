@@ -117,6 +117,15 @@ export function ChatList(props: { narrow?: boolean }) {
   const isMobileScreen = useMobileScreen();
   const config = useAppConfig();
 
+  const uniqueData = Object.values(
+    sessions.reduce((acc: any, item) => {
+      if (!acc[item.groupId]) {
+        acc[item.groupId] = item;
+      }
+      return acc;
+    }, {}),
+  );
+
   const onDragEnd: OnDragEndResponder = (result) => {
     const { destination, source } = result;
     if (!destination) {
@@ -143,7 +152,7 @@ export function ChatList(props: { narrow?: boolean }) {
             {...provided.droppableProps}
           >
             <Accordion allowMultiple>
-              {sessions.map((item, i) => (
+              {uniqueData.map((accordionItem: any, i) => (
                 <AccordionItem
                   className={styles["accordionItem"]}
                   header={
@@ -152,49 +161,53 @@ export function ChatList(props: { narrow?: boolean }) {
                         <div className={styles["accordion-title-icon"]}>
                           <DownIcon />
                         </div>
-                        <span>{item.topic}</span>
+                        <span>{accordionItem.groupTitle}</span>
                       </div>
                       <div
                         className={styles["accordion-title-icon"]}
                         onClick={() => {
-                          if (config.dontShowMaskSplashScreen) {
-                            chatStore.newSession();
-                            navigate(Path.Chat);
-                          } else {
-                            navigate(Path.NewChat);
-                          }
+                          chatStore.newGroupSession();
+                          chatStore.updateCurrentSession(
+                            (session) =>
+                              (session.groupId = accordionItem.groupId),
+                          );
                         }}
                       >
                         <AddIcon />
                       </div>
                     </div>
                   }
-                  key={item.id}
+                  key={accordionItem.groupId}
                   initialEntered
                 >
-                  <ChatItem
-                    title={item.topic}
-                    // time={new Date(item.lastUpdate).toLocaleString()}
-                    // count={item.messages.length}
-                    key={item.id}
-                    id={item.id}
-                    index={i}
-                    selected={i === selectedIndex}
-                    onClick={() => {
-                      navigate(Path.Chat);
-                      selectSession(i);
-                    }}
-                    onDelete={async () => {
-                      if (
-                        (!props.narrow && !isMobileScreen) ||
-                        (await showConfirm(Locale.Home.DeleteChat))
-                      ) {
-                        chatStore.deleteSession(i);
-                      }
-                    }}
-                    narrow={props.narrow}
-                    mask={item.mask}
-                  />
+                  {sessions.map(
+                    (item, i) =>
+                      accordionItem.groupId === item.groupId && (
+                        <ChatItem
+                          title={item.topic}
+                          // time={new Date(item.lastUpdate).toLocaleString()}
+                          // count={item.messages.length}
+                          key={item.id}
+                          id={item.id}
+                          index={i}
+                          selected={i === selectedIndex}
+                          onClick={() => {
+                            navigate(Path.Chat);
+                            selectSession(i);
+                          }}
+                          onDelete={async () => {
+                            if (
+                              (!props.narrow && !isMobileScreen) ||
+                              (await showConfirm(Locale.Home.DeleteChat))
+                            ) {
+                              chatStore.deleteSession(i);
+                            }
+                          }}
+                          narrow={props.narrow}
+                          mask={item.mask}
+                        />
+                      ),
+                  )}
                 </AccordionItem>
               ))}
               {provided.placeholder}
