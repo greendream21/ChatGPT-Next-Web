@@ -192,12 +192,12 @@
   white-space: nowrap;
   border: none;
   background: transparent;
-  text-align: start;
+  text-align: left;
 }
 
 .accordion-title-icon {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   align-items: center;
 }
 

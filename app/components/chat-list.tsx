@@ -219,7 +219,7 @@ export function ChatList(props: { narrow?: boolean }) {
                     style={{
                       position: "absolute",
                       zIndex: "1000",
-                      top: "7px",
+                      top: "5px",
                       left: "30px",
                     }}
                   >
