@@ -195,6 +195,7 @@ export class ChatGPTApi implements LLMApi {
             if (msg.data === "[DONE]" || finished) {
               return finish();
             }
+
             const text = msg.data;
             try {
               const json = JSON.parse(text) as {
@@ -205,6 +206,7 @@ export class ChatGPTApi implements LLMApi {
                 }>;
               };
               const delta = json.choices[0]?.delta?.content;
+
               if (delta) {
                 remainText += delta;
               }
@@ -227,6 +229,7 @@ export class ChatGPTApi implements LLMApi {
 
         const resJson = await res.json();
         const message = this.extractMessage(resJson);
+
         options.onFinish(message);
       }
     } catch (e) {

@@ -6,6 +6,7 @@ import { authMiddleware } from "@clerk/nextjs";
 export default authMiddleware({
   publicRoutes: [
     "/api/openai/v1/chat/completions",
+    "/api/mistral/v1/chat/completions",
     "/api/user",
     "/api/config",
     "/api/prompt",

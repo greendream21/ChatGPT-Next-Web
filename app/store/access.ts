@@ -34,6 +34,11 @@ const DEFAULT_ACCESS_STATE = {
   googleApiKey: "",
   googleApiVersion: "v1",
 
+  // mistral ai studio
+  mistralUrl: "",
+  mistralApiKey: "",
+  mistralApiVersion: "v1",
+
   // server config
   needCode: true,
   hideUserApiKey: false,

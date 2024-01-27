@@ -14,6 +14,8 @@ export const OPENAI_BASE_URL = "https://api.openai.com";
 
 export const GEMINI_BASE_URL = "https://generativelanguage.googleapis.com/";
 
+export const MISTRAL_BASE_URL = "https://api.mistral.ai/";
+
 export enum Path {
   Home = "/",
   Chat = "/chat",
@@ -68,11 +70,13 @@ export enum ServiceProvider {
   OpenAI = "OpenAI",
   Azure = "Azure",
   Google = "Google",
+  Mistral = "Mistral",
 }
 
 export enum ModelProvider {
   GPT = "GPT",
   GeminiPro = "GeminiPro",
+  MistralMedium = "MistralMedium",
 }
 
 export const OpenaiPath = {
@@ -91,6 +95,11 @@ export const Google = {
   ChatPath: "v1beta/models/gemini-pro:generateContent",
 
   // /api/openai/v1/chat/completions
+};
+
+export const Mistral = {
+  ExampleEndpoint: "https://api.mistral.ai/",
+  ChatPath: "v1/chat/completions",
 };
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
@@ -247,6 +256,15 @@ export const DEFAULT_MODELS = [
   //     providerType: "google",
   //   },
   // },
+  {
+    name: "mistral-medium",
+    available: true,
+    provider: {
+      id: "mistral",
+      providerName: "Mistral",
+      providerType: "mistral",
+    },
+  },
 ] as const;
 
 export const CHAT_PAGE_SIZE = 15;

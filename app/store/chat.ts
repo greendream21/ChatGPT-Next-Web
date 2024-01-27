@@ -282,7 +282,7 @@ export const useChatStore = createPersistStore(
           session.lastUpdate = Date.now();
         });
         get().updateStat(message);
-        get().summarizeSession();
+        // get().summarizeSession();
       },
 
       async onUserInput(content: string) {
@@ -320,7 +320,12 @@ export const useChatStore = createPersistStore(
           ]);
         });
 
-        var api: ClientApi = new ClientApi(ModelProvider.GPT);
+        var api: ClientApi;
+        if (modelConfig.model === "mistral-medium") {
+          api = new ClientApi(ModelProvider.MistralMedium);
+        } else {
+          api = new ClientApi(ModelProvider.GPT);
+        }
 
         // make request
         api.llm.chat({
@@ -495,105 +500,110 @@ export const useChatStore = createPersistStore(
         });
       },
 
-      summarizeSession() {
-        const config = useAppConfig.getState();
-        const session = get().currentSession();
-        const modelConfig = session.mask.modelConfig;
+      // summarizeSession() {
+      //   const config = useAppConfig.getState();
+      //   const session = get().currentSession();
+      //   const modelConfig = session.mask.modelConfig;
 
-        var api: ClientApi = new ClientApi(ModelProvider.GPT);
+      //   var api: ClientApi;
+      //   if (modelConfig.model === "mistral-medium") {
+      //     api = new ClientApi(ModelProvider.MistralMedium);
+      //   } else {
+      //     api = new ClientApi(ModelProvider.GPT);
+      //   }
 
-        // remove error messages if any
-        const messages = session.messages;
+      //   // remove error messages if any
+      //   const messages = session.messages;
 
-        // should summarize topic after chating more than 50 words
-        const SUMMARIZE_MIN_LEN = 50;
-        if (
-          config.enableAutoGenerateTitle &&
-          session.topic === DEFAULT_TOPIC &&
-          countMessages(messages) >= SUMMARIZE_MIN_LEN
-        ) {
-          const topicMessages = messages.concat(
-            createMessage({
-              role: "user",
-              content: Locale.Store.Prompt.Topic,
-            }),
-          );
-          api.llm.chat({
-            messages: topicMessages,
-            config: {
-              model: getSummarizeModel(session.mask.modelConfig.model),
-            },
-            onFinish(message) {
-              get().updateCurrentSession(
-                (session) =>
-                  (session.topic =
-                    message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
-              );
-            },
-          });
-        }
-        const summarizeIndex = Math.max(
-          session.lastSummarizeIndex,
-          session.clearContextIndex ?? 0,
-        );
-        let toBeSummarizedMsgs = messages
-          .filter((msg) => !msg.isError)
-          .slice(summarizeIndex);
+      //   // should summarize topic after chating more than 50 words
+      //   const SUMMARIZE_MIN_LEN = 50;
+      //   if (
+      //     config.enableAutoGenerateTitle &&
+      //     session.topic === DEFAULT_TOPIC &&
+      //     countMessages(messages) >= SUMMARIZE_MIN_LEN
+      //   ) {
+      //     const topicMessages = messages.concat(
+      //       createMessage({
+      //         role: "user",
+      //         content: Locale.Store.Prompt.Topic,
+      //       }),
+      //     );
+      //     api.llm.chat({
+      //       messages: topicMessages,
+      //       config: {
+      //         model: getSummarizeModel(session.mask.modelConfig.model),
+      //       },
+      //       onFinish(message) {
+      //         get().updateCurrentSession(
+      //           (session) =>
+      //             (session.topic =
+      //               message.length > 0 ? trimTopic(message) : DEFAULT_TOPIC),
+      //         );
+      //       },
+      //     });
+      //   }
+      //   const summarizeIndex = Math.max(
+      //     session.lastSummarizeIndex,
+      //     session.clearContextIndex ?? 0,
+      //   );
+      //   let toBeSummarizedMsgs = messages
+      //     .filter((msg) => !msg.isError)
+      //     .slice(summarizeIndex);
 
-        const historyMsgLength = countMessages(toBeSummarizedMsgs);
+      //   const historyMsgLength = countMessages(toBeSummarizedMsgs);
 
-        if (historyMsgLength > modelConfig?.max_tokens ?? 4000) {
-          const n = toBeSummarizedMsgs.length;
-          toBeSummarizedMsgs = toBeSummarizedMsgs.slice(
-            Math.max(0, n - modelConfig.historyMessageCount),
-          );
-        }
+      //   if (historyMsgLength > modelConfig?.max_tokens ?? 4000) {
+      //     const n = toBeSummarizedMsgs.length;
+      //     toBeSummarizedMsgs = toBeSummarizedMsgs.slice(
+      //       Math.max(0, n - modelConfig.historyMessageCount),
+      //     );
+      //   }
 
-        // add memory prompt
-        toBeSummarizedMsgs.unshift(get().getMemoryPrompt());
+      //   // add memory prompt
+      //   toBeSummarizedMsgs.unshift(get().getMemoryPrompt());
 
-        const lastSummarizeIndex = session.messages.length;
+      //   const lastSummarizeIndex = session.messages.length;
 
-        console.log(
-          "[Chat History] ",
-          toBeSummarizedMsgs,
-          historyMsgLength,
-          modelConfig.compressMessageLengthThreshold,
-        );
+      //   console.log(
+      //     "[Chat History] ",
+      //     toBeSummarizedMsgs,
+      //     historyMsgLength,
+      //     modelConfig.compressMessageLengthThreshold,
+      //   );
 
-        if (
-          historyMsgLength > modelConfig.compressMessageLengthThreshold &&
-          modelConfig.sendMemory
-        ) {
-          api.llm.chat({
-            messages: toBeSummarizedMsgs.concat(
-              createMessage({
-                role: "system",
-                content: Locale.Store.Prompt.Summarize,
-                date: "",
-              }),
-            ),
-            config: {
-              ...modelConfig,
-              stream: true,
-              model: getSummarizeModel(session.mask.modelConfig.model),
-            },
-            onUpdate(message) {
-              session.memoryPrompt = message;
-            },
-            onFinish(message) {
-              console.log("[Memory] ", message);
-              get().updateCurrentSession((session) => {
-                session.lastSummarizeIndex = lastSummarizeIndex;
-                session.memoryPrompt = message; // Update the memory prompt for stored it in local storage
-              });
-            },
-            onError(err) {
-              console.error("[Summarize] ", err);
-            },
-          });
-        }
-      },
+      //   if (
+      //     historyMsgLength > modelConfig.compressMessageLengthThreshold &&
+      //     modelConfig.sendMemory
+      //   ) {
+      //     api.llm.chat({
+      //       messages: toBeSummarizedMsgs.concat(
+      //         createMessage({
+      //           role: "system",
+      //           content: Locale.Store.Prompt.Summarize,
+      //           date: "",
+      //         }),
+      //       ),
+      //       config: {
+      //         ...modelConfig,
+      //         stream: true,
+      //         model: getSummarizeModel(session.mask.modelConfig.model),
+      //       },
+      //       onUpdate(message) {
+      //         session.memoryPrompt = message;
+      //       },
+      //       onFinish(message) {
+      //         console.log("[Memory] ", message);
+      //         get().updateCurrentSession((session) => {
+      //           session.lastSummarizeIndex = lastSummarizeIndex;
+      //           session.memoryPrompt = message; // Update the memory prompt for stored it in local storage
+      //         });
+      //       },
+      //       onError(err) {
+      //         console.error("[Summarize] ", err);
+      //       },
+      //     });
+      //   }
+      // },
 
       updateStat(message: ChatMessage) {
         get().updateCurrentSession((session) => {
