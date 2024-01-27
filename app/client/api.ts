@@ -8,6 +8,7 @@ import {
 import { ChatMessage, ModelType, useAccessStore, useChatStore } from "../store";
 import { ChatGPTApi } from "./platforms/openai";
 import { GeminiProApi } from "./platforms/google";
+import { MistralMediumApi } from "./platforms/mistral";
 export const ROLES = ["system", "user", "assistant"] as const;
 export type MessageRole = (typeof ROLES)[number];
 
@@ -90,6 +91,11 @@ export class ClientApi {
       this.llm = new GeminiProApi();
       return;
     }
+
+    if (provider === ModelProvider.MistralMedium) {
+      this.llm = new MistralMediumApi();
+      return;
+    }
     this.llm = new ChatGPTApi();
   }
 
@@ -144,13 +150,22 @@ export function getHeaders() {
   const headers: Record<string, string> = {
     "Content-Type": "application/json",
     "x-requested-with": "XMLHttpRequest",
-    Accept: "application/json",
   };
   const modelConfig = useChatStore.getState().currentSession().mask.modelConfig;
   // const isGoogle = modelConfig.model === "gemini-pro";
+  const isMistral = modelConfig.model === "mistral-medium";
   const isAzure = accessStore.provider === ServiceProvider.Azure;
   const authHeader = isAzure ? "api-key" : "Authorization";
-  const apiKey = accessStore.openaiApiKey;
+  const apiKey = isMistral
+    ? accessStore.mistralApiKey
+    : accessStore.openaiApiKey;
+
+  if (isMistral) {
+    headers["User-Agent"] = "mistral-client-js/0.0.3";
+    headers["Accept"] = "text/event-stream";
+  } else {
+    headers["Accept"] = "application/json";
+  }
 
   const makeBearer = (s: string) => `${isAzure ? "" : "Bearer "}${s.trim()}`;
   const validString = (x: string) => x && x.length > 0;

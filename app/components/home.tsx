@@ -151,9 +151,11 @@ function Screen() {
       for (let i = 0; i < data.length; i++) {
         if (data[i].id === "default") {
           // amount = data[i].limit;
-          accessStore.update(
-            (access) => (access.openaiApiKey = data[i].apikey),
-          );
+          accessStore.update((access) => {
+            access.openaiApiKey = data[i].apikey;
+            access.mistralApiKey = data[i].mistralapikey;
+            return access; // It might be necessary to return the updated access, depending on the store's implementation.
+          });
         }
       }
 
@@ -210,12 +212,11 @@ export function useLoadData() {
   const config = useAppConfig();
 
   var api: ClientApi;
-  // if (config.modelConfig.model === "gemini-pro") {
-  //   api = new ClientApi(ModelProvider.GeminiPro);
-  // } else {
-  //   api = new ClientApi(ModelProvider.GPT);
-  // }
-  api = new ClientApi(ModelProvider.GPT);
+  if (config.modelConfig.model === "mistral-medium") {
+    api = new ClientApi(ModelProvider.MistralMedium);
+  } else {
+    api = new ClientApi(ModelProvider.GPT);
+  }
   useEffect(() => {
     (async () => {
       const models = await api.llm.models();

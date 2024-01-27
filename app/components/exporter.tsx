@@ -306,12 +306,12 @@ export function PreviewActions(props: {
   const onRenderMsgs = (msgs: ChatMessage[]) => {
     setShouldExport(false);
 
-    var api: ClientApi = new ClientApi(ModelProvider.GPT);
-    // if (config.modelConfig.model === "gemini-pro") {
-    //   api = new ClientApi(ModelProvider.GeminiPro);
-    // } else {
-    //   api = new ClientApi(ModelProvider.GPT);
-    // }
+    var api: ClientApi;
+    if (config.modelConfig.model === "mistral-medium") {
+      api = new ClientApi(ModelProvider.MistralMedium);
+    } else {
+      api = new ClientApi(ModelProvider.GPT);
+    }
 
     api
       .share(msgs)

@@ -58,11 +58,11 @@ export function auth(req: NextRequest, modelProvider: ModelProvider) {
     const serverConfig = getServerSideConfig();
 
     const systemApiKey =
-      modelProvider === ModelProvider.GeminiPro
-        ? serverConfig.googleApiKey
+      modelProvider === ModelProvider.MistralMedium
+        ? serverConfig.mistralApiKey
         : serverConfig.isAzure
-        ? serverConfig.azureApiKey
-        : serverConfig.apiKey;
+          ? serverConfig.azureApiKey
+          : serverConfig.apiKey;
     if (systemApiKey) {
       console.log("[Auth] use system api key");
       req.headers.set("Authorization", `Bearer ${systemApiKey}`);

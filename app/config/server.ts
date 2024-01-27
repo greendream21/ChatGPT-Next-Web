@@ -66,6 +66,7 @@ export const getServerSideConfig = () => {
 
   const isAzure = !!process.env.AZURE_URL;
   const isGoogle = !!process.env.GOOGLE_API_KEY;
+  const isMistral = !!process.env.Mistral_API_KEY;
 
   const apiKeyEnvVar = process.env.OPENAI_API_KEY ?? "";
   const apiKeys = apiKeyEnvVar.split(",").map((v) => v.trim());
@@ -88,6 +89,10 @@ export const getServerSideConfig = () => {
     isGoogle,
     googleApiKey: process.env.GOOGLE_API_KEY,
     googleUrl: process.env.GOOGLE_URL,
+
+    isMistral,
+    mistralApiKey: process.env.MISTRAL_API_KEY,
+    mistralUrl: process.env.MISTRAL_URL,
 
     needCode: ACCESS_CODES.size > 0,
     code: process.env.CODE,
