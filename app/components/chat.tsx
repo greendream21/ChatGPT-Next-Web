@@ -644,6 +644,14 @@ function _Chat() {
     }
   };
 
+  const setLog = async (agentData: any) => {
+    try {
+      await axios.post("/api/usage", agentData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const getData = async () => {
     try {
       const { data } = await axios.get("/api/user");
@@ -717,6 +725,14 @@ function _Chat() {
     console.log("Free Tier Limit: ", freeTierLimit);
 
     updateData(agentData);
+
+    const model = session.mask.modelConfig.model;
+
+    const logData = {
+      userId,
+      model,
+    };
+    setLog(logData);
 
     if (userInput.trim() === "") return;
 
