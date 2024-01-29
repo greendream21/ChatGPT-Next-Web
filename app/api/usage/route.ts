@@ -18,13 +18,13 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId, model } = await request.json();
+  const { email, model } = await request.json();
 
   try {
     await dbConnect();
 
     const newData = {
-      userId,
+      email,
       model,
     };
 

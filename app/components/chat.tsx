@@ -597,7 +597,9 @@ function _Chat() {
   const navigate = useNavigate();
 
   const userdata = useUser();
+
   const userId = userdata.user?.id;
+  const email = userdata.user?.emailAddresses[0].emailAddress;
 
   const [limit, setLimit] = useState();
 
@@ -729,7 +731,7 @@ function _Chat() {
     const model = session.mask.modelConfig.model;
 
     const logData = {
-      userId,
+      email,
       model,
     };
     setLog(logData);
