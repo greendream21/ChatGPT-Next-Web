@@ -950,7 +950,7 @@ function _Chat() {
               {
                 ...createMessage({
                   role: "user",
-                  content: userInput,
+                  content: "",
                 }),
                 preview: true,
               },
