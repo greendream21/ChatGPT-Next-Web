@@ -93,6 +93,7 @@ import { useAllModels } from "../utils/hooks";
 
 import { useUser } from "@clerk/nextjs";
 import axios from "axios";
+import { getEncoding } from "js-tiktoken";
 
 const Markdown = dynamic(async () => (await import("./markdown")).Markdown, {
   loading: () => <LoadingIcon />,
@@ -646,14 +647,6 @@ function _Chat() {
     }
   };
 
-  const setLog = async (agentData: any) => {
-    try {
-      await axios.post("/api/usage", agentData);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   const getData = async () => {
     try {
       const { data } = await axios.get("/api/user");
@@ -705,7 +698,34 @@ function _Chat() {
     }
   };
 
+  const setLog = async (msg: any) => {
+    const encoding = getEncoding("cl100k_base");
+
+    const tokens = encoding.encode(msg);
+
+    const model = session.mask.modelConfig.model;
+    const userEmail = email;
+    const token = tokens.length;
+
+    try {
+      const logData = {
+        email: userEmail,
+        model,
+        token,
+        methods: "input",
+      };
+
+      await axios.post("/api/usage", logData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const doSubmit = async (userInput: string) => {
+    if (email !== undefined) {
+      session.stat.email = email;
+    }
+
     if (typeof limit === "undefined") {
       getData();
 
@@ -728,14 +748,6 @@ function _Chat() {
 
     updateData(agentData);
 
-    const model = session.mask.modelConfig.model;
-
-    const logData = {
-      email,
-      model,
-    };
-    setLog(logData);
-
     if (userInput.trim() === "") return;
 
     const matchCommand = chatCommands.match(userInput);
@@ -746,7 +758,11 @@ function _Chat() {
       return;
     }
     setIsLoading(true);
-    chatStore.onUserInput(userInput).then(() => setIsLoading(false));
+    chatStore.onUserInput(userInput).then(() => {
+      setIsLoading(false);
+    });
+    setLog(userInput);
+
     localStorage.setItem(LAST_INPUT_KEY, userInput);
     setUserInput("");
     setPromptHints([]);
@@ -875,6 +891,7 @@ function _Chat() {
     } else if (message.role === "user") {
       // if it is resending a user's input, find the bot's response
       userMessage = message;
+
       for (let i = resendingIndex; i < session.messages.length; i += 1) {
         if (session.messages[i].role === "assistant") {
           botMessage = session.messages[i];
@@ -894,7 +911,9 @@ function _Chat() {
 
     // resend the message
     setIsLoading(true);
-    chatStore.onUserInput(userMessage.content).then(() => setIsLoading(false));
+    chatStore.onUserInput(userMessage.content).then(() => {
+      setIsLoading(false);
+    });
     inputRef.current?.focus();
   };
 
@@ -1127,9 +1146,6 @@ function _Chat() {
           <Select
             value={currentModel}
             onChange={(e) => {
-              console.log("ChatStore: ", chatStore);
-
-              console.log("Model", e.target.value);
               chatStore.updateCurrentSession((session) => {
                 session.mask.modelConfig.model = e.target.value as ModelType;
                 session.mask.syncGlobalConfig = false;

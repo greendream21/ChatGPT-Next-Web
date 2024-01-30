@@ -30,6 +30,7 @@
     "encoding": "^0.1.13",
     "fuse.js": "^7.0.0",
     "html-to-image": "^1.11.11",
+    "js-tiktoken": "^1.0.10",
     "mermaid": "^10.6.1",
     "mongoose": "^8.0.3",
     "nanoid": "^5.0.3",
