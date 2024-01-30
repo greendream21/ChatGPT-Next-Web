@@ -11,6 +11,9 @@ import Locale from "../../locales";
 import { getServerSideConfig } from "@/app/config/server";
 import de from "@/app/locales/de";
 import MistralClient from "@mistralai/mistralai";
+import { getEncoding } from "js-tiktoken";
+import axios from "axios";
+
 export class MistralMediumApi implements LLMApi {
   extractMessage(res: any) {
     console.log("[Response] mistral-medium response: ", res);
@@ -59,6 +62,9 @@ export class MistralMediumApi implements LLMApi {
         model: options.config.model,
       },
     };
+
+    const session = useChatStore.getState().currentSession();
+
     const requestPayload = {
       contents: messageItem,
     };
@@ -79,15 +85,39 @@ export class MistralMediumApi implements LLMApi {
 
     const chatStreamResponse = await client.chatStream(messageItem);
 
+    const setLog = async (msg: any) => {
+      const encoding = getEncoding("cl100k_base");
+
+      const tokens = encoding.encode(msg);
+
+      const model = session.mask.modelConfig.model;
+      const email = session.stat.email;
+      const token = tokens.length;
+
+      try {
+        const logData = {
+          email,
+          model,
+          token,
+          methods: "output",
+        };
+
+        await axios.post("/api/usage", logData);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
     for await (const chunk of chatStreamResponse) {
       if (chunk.choices[0].delta.content !== undefined) {
         const streamText = chunk.choices[0].delta.content;
 
         streamedResponse += streamText;
       }
-
       options.onFinish(streamedResponse);
     }
+
+    setLog(streamedResponse);
 
     // try {
     //   const chatPath = this.path(Mistral.ChatPath);

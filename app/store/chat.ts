@@ -38,6 +38,7 @@ export function createMessage(override: Partial<ChatMessage>): ChatMessage {
 }
 
 export interface ChatStat {
+  email: string;
   tokenCount: number;
   wordCount: number;
   charCount: number;
@@ -74,6 +75,7 @@ function createEmptySession(): ChatSession {
     memoryPrompt: "",
     messages: [],
     stat: {
+      email: "",
       tokenCount: 0,
       wordCount: 0,
       charCount: 0,
@@ -608,6 +610,7 @@ export const useChatStore = createPersistStore(
       updateStat(message: ChatMessage) {
         get().updateCurrentSession((session) => {
           session.stat.charCount += message.content.length;
+
           // TODO: should update chat count and word count
         });
       },

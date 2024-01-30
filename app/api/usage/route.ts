@@ -18,7 +18,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { email, model } = await request.json();
+  const { email, model, token, methods } = await request.json();
 
   try {
     await dbConnect();
@@ -26,6 +26,8 @@ export async function POST(request: NextRequest) {
     const newData = {
       email,
       model,
+      token,
+      methods,
     };
 
     const data = new Usage(newData);

@@ -18,6 +18,9 @@ import { prettyObject } from "@/app/utils/format";
 import { getClientConfig } from "@/app/config/client";
 import { makeAzurePath } from "@/app/azure";
 
+import { getEncoding } from "js-tiktoken";
+import axios from "axios";
+
 export interface OpenAIListModelResponse {
   object: string;
   data: Array<{
@@ -80,6 +83,8 @@ export class ChatGPTApi implements LLMApi {
       },
     };
 
+    const session = useChatStore.getState().currentSession();
+
     const requestPayload = {
       messages,
       stream: options.config.stream,
@@ -118,10 +123,34 @@ export class ChatGPTApi implements LLMApi {
         let remainText = "";
         let finished = false;
 
+        const setLog = async (msg: any) => {
+          const encoding = getEncoding("cl100k_base");
+
+          const tokens = encoding.encode(msg);
+
+          const model = session.mask.modelConfig.model;
+          const email = session.stat.email;
+          const token = tokens.length;
+
+          try {
+            const logData = {
+              email,
+              model,
+              token,
+              methods: "output",
+            };
+
+            await axios.post("/api/usage", logData);
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
         // animate response to make it looks smooth
         function animateResponseText() {
           if (finished || controller.signal.aborted) {
             responseText += remainText;
+            setLog(responseText);
             console.log("[Response Animation] finished");
             return;
           }

@@ -5,6 +5,8 @@ const UsageSchema = new Schema(
   {
     email: { type: String, required: true },
     model: { type: String },
+    token: { type: Number },
+    methods: { type: String },
   },
   { timestamps: true },
 );
