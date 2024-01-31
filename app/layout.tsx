@@ -1,13 +1,14 @@
 /* eslint-disable @next/next/no-page-custom-font */
-import "./styles/globals.scss";
-import "./styles/markdown.scss";
-import "./styles/highlight.scss";
 import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { getServerSideConfig } from "./config/server";
 
 import { ClerkProvider } from "@clerk/nextjs";
+
+import "./styles/globals.scss";
+import "./styles/markdown.scss";
+import "./styles/highlight.scss";
 
 const serverConfig = getServerSideConfig();
 
