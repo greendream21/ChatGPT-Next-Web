@@ -53,6 +53,7 @@ const tr: PartialLocaleType = {
       "Sıfırlama, geçerli görüşme geçmişini ve geçmiş belleği siler. Sıfırlamak istediğinizden emin misiniz?",
   },
   Home: {
+    NewFolder: "Yeni dosya",
     NewChat: "Yeni Sohbet",
     DeleteChat: "Seçili sohbeti silmeyi onaylıyor musunuz?",
     DeleteToast: "Sohbet Silindi",

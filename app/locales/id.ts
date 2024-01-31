@@ -107,6 +107,7 @@ const id: PartialLocaleType = {
       "Jika Anda mereset, riwayat obrolan saat ini dan memori historis akan dihapus. Apakah Anda yakin ingin melakukan reset?",
   },
   Home: {
+    NewFolder: "Folder baru",
     NewChat: "Obrolan Baru",
     DeleteChat: "Anda yakin ingin menghapus percakapan yang dipilih?",
     DeleteToast: "Percakapan telah dihapus",

@@ -53,6 +53,7 @@ const vi: PartialLocaleType = {
       "Đặt lại sẽ xóa toàn bộ lịch sử trò chuyện hiện tại và bộ nhớ. Bạn có chắc chắn muốn đặt lại không?",
   },
   Home: {
+    NewFolder: "Thư mục mới",
     NewChat: "Cuộc trò chuyện mới",
     DeleteChat: "Xác nhận xóa các cuộc trò chuyện đã chọn?",
     DeleteToast: "Đã xóa cuộc trò chuyện",

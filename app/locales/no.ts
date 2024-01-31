@@ -49,6 +49,7 @@ const no: PartialLocaleType = {
       "Om du nillstiller vil du slette hele historikken. Er du sikker på at du vil nullstille?",
   },
   Home: {
+    NewFolder: "Ny mappe",
     NewChat: "Ny chat",
     DeleteChat: "Bekreft for å slette det valgte dialogen",
     DeleteToast: "Samtale slettet",

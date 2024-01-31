@@ -119,6 +119,7 @@ const cn = {
     ResetConfirm: "确认清空历史摘要？",
   },
   Home: {
+    NewFolder: "新建文件夹",
     NewChat: "新的聊天",
     DeleteChat: "确认删除选中的对话？",
     DeleteToast: "已删除会话",

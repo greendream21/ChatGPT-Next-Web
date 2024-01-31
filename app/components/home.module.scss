@@ -62,6 +62,14 @@
     }
   }
 
+  .sidebar-chat-button {
+    display: flex;
+    flex-direction: row;
+    gap: 15px;
+    justify-content: center;
+    align-items: center;
+  }
+
   &:hover,
   &:active {
     .sidebar-drag {

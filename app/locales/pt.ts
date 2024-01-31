@@ -122,6 +122,7 @@ const pt: PartialLocaleType = {
       "Resetar irá limpar o histórico de conversa atual e a memória histórica. Você tem certeza que quer resetar?",
   },
   Home: {
+    NewFolder: "Nova pasta",
     NewChat: "Novo Chat",
     DeleteChat: "Confirmar para deletar a conversa selecionada?",
     DeleteToast: "Chat Deletado",
