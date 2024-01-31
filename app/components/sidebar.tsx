@@ -208,7 +208,32 @@ export function SideBar(props: { className?: string }) {
           shadow
         />
 
-        <UserButton />
+        <UserButton afterSignOutUrl="/" />
+      </div>
+
+      <div className={styles["sidebar-chat-button"]}>
+        <div>
+          <IconButton
+            icon={<AddIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.NewFolder}
+            onClick={() => {
+              chatStore.newSession();
+              navigate(Path.Chat);
+            }}
+            shadow
+          />
+        </div>
+        <div>
+          <IconButton
+            icon={<AddIcon />}
+            text={shouldNarrow ? undefined : Locale.Home.NewChat}
+            onClick={() => {
+              chatStore.newSession();
+              navigate(Path.Chat);
+            }}
+            shadow
+          />
+        </div>
       </div>
 
       <div
@@ -248,23 +273,6 @@ export function SideBar(props: { className?: string }) {
               shadow
             />
           </div>
-        </div>
-        <div>
-          <IconButton
-            icon={<AddIcon />}
-            text={shouldNarrow ? undefined : Locale.Home.NewChat}
-            onClick={() => {
-              console.log("Enter", config.dontShowMaskSplashScreen);
-
-              if (config.dontShowMaskSplashScreen) {
-                chatStore.newSession();
-                navigate(Path.Chat);
-              } else {
-                navigate(Path.NewChat);
-              }
-            }}
-            shadow
-          />
         </div>
       </div>
 
