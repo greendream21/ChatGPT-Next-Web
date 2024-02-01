@@ -217,7 +217,7 @@ export function SideBar(props: { className?: string }) {
             icon={<AddIcon />}
             text={shouldNarrow ? undefined : Locale.Home.NewFolder}
             onClick={() => {
-              chatStore.newSession();
+              chatStore.newGroupSession();
               navigate(Path.Chat);
             }}
             shadow

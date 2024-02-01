@@ -151,6 +151,7 @@ export function getHeaders() {
     "Content-Type": "application/json",
     "x-requested-with": "XMLHttpRequest",
   };
+
   const modelConfig = useChatStore.getState().currentSession().mask.modelConfig;
   // const isGoogle = modelConfig.model === "gemini-pro";
   const isMistral = modelConfig.model === "mistral-medium";
