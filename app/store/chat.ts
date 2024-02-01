@@ -55,6 +55,23 @@ export interface ChatSession {
   lastUpdate: number;
   lastSummarizeIndex: number;
   clearContextIndex?: number;
+  isHeader: boolean;
+
+  mask: Mask;
+}
+
+export interface GroupSession {
+  id: string;
+  topic: string;
+  groupId: string;
+  groupTitle: string;
+  memoryPrompt: string;
+  messages: ChatMessage[];
+  stat: ChatStat;
+  lastUpdate: number;
+  lastSummarizeIndex: number;
+  clearContextIndex?: number;
+  isHeader: boolean;
 
   mask: Mask;
 }
@@ -67,6 +84,28 @@ export const BOT_HELLO: ChatMessage = createMessage({
 });
 
 function createEmptySession(): ChatSession {
+  return {
+    id: nanoid(),
+    groupId: "",
+    groupTitle: "",
+    topic: DEFAULT_TOPIC,
+    memoryPrompt: "",
+    messages: [],
+    stat: {
+      email: "",
+      tokenCount: 0,
+      wordCount: 0,
+      charCount: 0,
+    },
+    lastUpdate: Date.now(),
+    lastSummarizeIndex: 0,
+    isHeader: false,
+
+    mask: createEmptyMask(),
+  };
+}
+
+function createGroupEmptySession(): GroupSession {
   return {
     id: nanoid(),
     groupId: nanoid(),
@@ -82,6 +121,7 @@ function createEmptySession(): ChatSession {
     },
     lastUpdate: Date.now(),
     lastSummarizeIndex: 0,
+    isHeader: true,
 
     mask: createEmptyMask(),
   };
@@ -194,24 +234,31 @@ export const useChatStore = createPersistStore(
           session.topic = mask.name;
         }
 
-        set((state) => ({
-          currentSessionIndex: 0,
-          sessions: [session].concat(state.sessions),
-        }));
+        set((state) => {
+          return {
+            currentSessionIndex: 0,
+            sessions: [session].concat(state.sessions),
+          };
+        });
       },
 
-      newGroupSession(group: any) {
-        const session = createEmptySession();
+      newGroupSession(group?: any) {
+        const session = createGroupEmptySession();
 
-        set((state) => ({
-          currentSessionIndex: 0,
-          sessions: [session].concat(state.sessions),
-        }));
-
-        get().updateCurrentSession((session) => {
-          session.groupId = group.groupId;
-          session.groupTitle = group.groupTitle;
+        set((state) => {
+          return {
+            currentSessionIndex: 0,
+            sessions: [session].concat(state.sessions),
+          };
         });
+
+        if (group) {
+          get().updateCurrentSession((session) => {
+            session.groupId = group.groupId;
+            session.groupTitle = group.groupTitle;
+            session.isHeader = false;
+          });
+        }
       },
 
       nextSession(delta: number) {
@@ -219,6 +266,34 @@ export const useChatStore = createPersistStore(
         const limit = (x: number) => (x + n) % n;
         const i = get().currentSessionIndex;
         get().selectSession(limit(i + delta));
+      },
+
+      deleteGroupSession(id: string) {
+        const deletingLastSession = get().sessions.length === 1;
+
+        const sessions = get().sessions.slice();
+
+        for (let i = sessions.length - 1; i >= 0; i--) {
+          if (sessions[i].groupId === id) {
+            sessions.splice(i, 1);
+
+            const currentIndex = get().currentSessionIndex;
+            let nextIndex = Math.min(
+              currentIndex - Number(i < currentIndex),
+              sessions.length - 1,
+            );
+
+            if (deletingLastSession) {
+              nextIndex = 0;
+              sessions.push(createEmptySession());
+            }
+
+            set(() => ({
+              currentSessionIndex: nextIndex,
+              sessions,
+            }));
+          }
+        }
       },
 
       deleteSession(index: number) {

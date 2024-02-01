@@ -937,7 +937,8 @@ function _Chat() {
 
   if (
     context.length === 0 &&
-    session.messages.at(0)?.content !== BOT_HELLO.content
+    session.messages.at(0)?.content !== BOT_HELLO.content &&
+    !session.isHeader
   ) {
     const copiedHello = Object.assign({}, BOT_HELLO);
     if (!accessStore.isAuthorized()) {
@@ -1381,6 +1382,7 @@ function _Chat() {
             style={{
               fontSize: config.fontSize,
             }}
+            disabled={session.isHeader}
           />
           <IconButton
             icon={<SendWhiteIcon />}
