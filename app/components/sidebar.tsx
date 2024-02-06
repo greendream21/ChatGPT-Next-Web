@@ -14,7 +14,7 @@ import MaskIcon from "../icons/mask.svg";
 import PluginIcon from "../icons/plugin.svg";
 import DragIcon from "../icons/drag.svg";
 import PromptIcon from "../icons/prompt.svg";
-import ShopIcon from "../icons/shop.svg";
+import UpgradeIcon from "../icons/upgrade.svg";
 
 import { UserPromptModal } from "./prompter";
 
@@ -262,13 +262,20 @@ export function SideBar(props: { className?: string }) {
             />
           </div>
           <div className={styles["sidebar-action"]}>
-            <Link to={Path.Settings}>
-              <IconButton icon={<SettingsIcon />} shadow />
+            <Link style={{ textDecoration: "none" }} to={Path.Settings}>
+              <IconButton
+                icon={<SettingsIcon />}
+                text={
+                  shouldNarrow ? undefined : Locale.Chat.InputActions.Settings
+                }
+                shadow
+              />
             </Link>
           </div>
           <div className={styles["sidebar-action"]}>
             <IconButton
-              icon={<ShopIcon />}
+              icon={<UpgradeIcon />}
+              text={shouldNarrow ? undefined : Locale.Chat.InputActions.Upgrade}
               onClick={() => setIsPaymentModal(true)}
               shadow
             />
