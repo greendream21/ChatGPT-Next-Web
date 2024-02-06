@@ -351,8 +351,10 @@
     align-items: center;
 
     .sidebar-actions {
+      width: 100%;
       flex-direction: column-reverse;
       align-items: center;
+      gap: 15px;
 
       .sidebar-action {
         margin-right: 0;
@@ -364,16 +366,13 @@
 
 .sidebar-tail {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   padding-top: 20px;
 }
 
 .sidebar-actions {
   display: inline-flex;
-}
-
-.sidebar-action:not(:last-child) {
-  margin-right: 15px;
+  gap: 15px;
 }
 
 .loading-content {
