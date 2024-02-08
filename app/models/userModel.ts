@@ -5,6 +5,7 @@ const UserSchema = new Schema(
   {
     userId: { type: String, required: true },
     email: { type: String },
+    phone: { type: String },
     amount: { type: Number },
   },
   { timestamps: true },

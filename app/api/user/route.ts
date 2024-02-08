@@ -19,7 +19,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId, email, amount } = await request.json();
+  const { userId, email, amount, phone } = await request.json();
 
   try {
     await dbConnect();
@@ -29,12 +29,14 @@ export async function POST(request: NextRequest) {
     const newData = {
       userId,
       email,
+      phone,
       amount: limit,
     };
 
     const updateData = {
       userId,
       amount,
+      phone,
     };
 
     const data = new User(newData);
