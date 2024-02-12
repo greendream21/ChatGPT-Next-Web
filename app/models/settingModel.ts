@@ -5,6 +5,7 @@ const SettingSchema = new Schema(
   {
     id: { type: String, required: true },
     apikey: { type: String },
+    redirectURL: { type: String },
     mistralapikey: { type: String },
     limit: { type: Number },
   },

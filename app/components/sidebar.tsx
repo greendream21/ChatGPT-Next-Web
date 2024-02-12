@@ -38,6 +38,8 @@ import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
 import { showConfirm, showToast } from "./ui-lib";
 import PaymentPage from "./payment";
+import axios from "axios";
+import { error } from "console";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -152,6 +154,32 @@ export function SideBar(props: { className?: string }) {
   const [showPrompt, setShowPrompt] = useState(false);
 
   const [isPaymentModal, setIsPaymentModal] = useState(false);
+
+  const [redirectURL, setRedirectURL] = useState("");
+
+  const fetchData = async () => {
+    try {
+      const { data } = await axios.get("api/setting");
+
+      let url;
+
+      for (let i = 0; i < data.length; i++) {
+        if (data[i].id === "default") {
+          url = data[i].redirectURL;
+        }
+      }
+
+      console.log(url);
+
+      setRedirectURL(url);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
 
   useHotKey();
 
@@ -273,12 +301,16 @@ export function SideBar(props: { className?: string }) {
             </Link>
           </div>
           <div className={styles["sidebar-action"]}>
-            <IconButton
-              icon={<UpgradeIcon />}
-              text={shouldNarrow ? undefined : Locale.Chat.InputActions.Upgrade}
-              onClick={() => setIsPaymentModal(true)}
-              shadow
-            />
+            <Link style={{ textDecoration: "none" }} to={redirectURL}>
+              <IconButton
+                icon={<UpgradeIcon />}
+                text={
+                  shouldNarrow ? undefined : Locale.Chat.InputActions.Upgrade
+                }
+                // onClick={() => setIsPaymentModal(true)}
+                shadow
+              />
+            </Link>
           </div>
         </div>
       </div>

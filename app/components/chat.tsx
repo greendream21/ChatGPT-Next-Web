@@ -601,7 +601,7 @@ function _Chat() {
 
   const userId = userdata.user?.id;
   const email = userdata.user?.emailAddresses[0].emailAddress;
-  const phone = userdata.user?.phoneNumbers[0].phoneNumber;
+  const phone = userdata.user?.phoneNumbers[0]?.phoneNumber;
 
   const [limit, setLimit] = useState();
 

@@ -139,7 +139,7 @@ function Screen() {
 
   const userId = data.user?.id;
   const email = data.user?.emailAddresses[0].emailAddress;
-  const phone = data.user?.phoneNumbers[0].phoneNumber;
+  const phone = data.user?.phoneNumbers[0]?.phoneNumber;
 
   useEffect(() => {
     loadAsyncGoogleFont();
