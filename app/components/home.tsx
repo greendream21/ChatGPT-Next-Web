@@ -139,6 +139,7 @@ function Screen() {
 
   const userId = data.user?.id;
   const email = data.user?.emailAddresses[0].emailAddress;
+  const phone = data.user?.phoneNumbers[0]?.phoneNumber;
 
   useEffect(() => {
     loadAsyncGoogleFont();
@@ -162,6 +163,7 @@ function Screen() {
       const newData = {
         userId,
         email,
+        phone,
       };
 
       const response = await axios.post("/api/user", newData);

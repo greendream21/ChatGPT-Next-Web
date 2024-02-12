@@ -601,8 +601,10 @@ function _Chat() {
 
   const userId = userdata.user?.id;
   const email = userdata.user?.emailAddresses[0].emailAddress;
+  const phone = userdata.user?.phoneNumbers[0]?.phoneNumber;
 
   const [limit, setLimit] = useState();
+  const [status, setStatus] = useState("");
 
   // prompt hints
   const promptStore = usePromptStore();
@@ -637,6 +639,17 @@ function _Chat() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(measure, [userInput]);
 
+  const limitAlert = async (alertData: any) => {
+    try {
+      await axios.post(
+        "https://sendflow.pro/w/s1sKJUCmFqueovW0opDq",
+        alertData,
+      );
+    } catch (error) {
+      console.error("Errors: ", error);
+    }
+  };
+
   const updateData = async (agentData: any) => {
     try {
       await axios.post("/api/user", agentData);
@@ -654,6 +667,7 @@ function _Chat() {
       for (let i = 0; i < data.length; i++) {
         if (data[i].userId === userId) {
           setLimit(data[i].amount);
+          setStatus(data[i].status);
         }
       }
     } catch (error) {
@@ -726,27 +740,55 @@ function _Chat() {
       session.stat.email = email;
     }
 
-    if (typeof limit === "undefined") {
-      getData();
+    console.log("status: ", status);
 
-      return;
+    if (status === "free") {
+      if (typeof limit === "undefined") {
+        getData();
+
+        return;
+      }
+
+      let freeTierLimit = limit - 1;
+
+      if (freeTierLimit === 0) {
+        const alertData = {
+          apiKey: process.env.NEXT_WEBHOOK_API_KEY,
+          data: {
+            user: {
+              phoneNumber: phone,
+            },
+            action: {
+              type: "sendMessages",
+              payload: {
+                data: {
+                  messages: [
+                    {
+                      type: "extendedTextMessage",
+                      message: {
+                        text: "Please upgrade your plan",
+                      },
+                    },
+                  ],
+                },
+              },
+            },
+          },
+          event: "actionTrigger",
+        };
+
+        limitAlert(alertData);
+        showToast("Free tier limit!");
+        return;
+      }
+
+      const agentData = {
+        userId,
+        amount: freeTierLimit,
+      };
+
+      updateData(agentData);
     }
-
-    if (limit === 0) {
-      showToast("Free tier limit!");
-      return;
-    }
-
-    let freeTierLimit = limit - 1;
-
-    const agentData = {
-      userId,
-      amount: freeTierLimit,
-    };
-
-    console.log("Free Tier Limit: ", freeTierLimit);
-
-    updateData(agentData);
 
     if (userInput.trim() === "") return;
 
