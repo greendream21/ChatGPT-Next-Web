@@ -23,11 +23,11 @@ export async function POST(req: NextRequest) {
       if (!checkable)
         return NextResponse.json("Please signup with ChatGPT project!");
 
-      const updateAmount = checkable.amount + 1000;
+      const status = "premium";
 
       const response = await User.updateOne(
         { email },
-        { $set: { amount: updateAmount } },
+        { $set: { status: status } },
       );
 
       return NextResponse.json(response);

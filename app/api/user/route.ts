@@ -19,7 +19,7 @@ export async function GET() {
 }
 
 export async function POST(request: NextRequest) {
-  const { userId, email, amount, phone } = await request.json();
+  const { userId, email, amount, phone, status } = await request.json();
 
   try {
     await dbConnect();
@@ -31,12 +31,14 @@ export async function POST(request: NextRequest) {
       email,
       phone,
       amount: limit,
+      status: "free",
     };
 
     const updateData = {
       userId,
       amount,
       phone,
+      status,
     };
 
     const data = new User(newData);
@@ -49,7 +51,7 @@ export async function POST(request: NextRequest) {
       const response = await User.updateOne(
         { userId },
         {
-          $set: { amount: updateData.amount },
+          $set: { amount: updateData.amount, status: updateData.status },
         },
       );
 

@@ -604,6 +604,7 @@ function _Chat() {
   const phone = userdata.user?.phoneNumbers[0]?.phoneNumber;
 
   const [limit, setLimit] = useState();
+  const [status, setStatus] = useState("");
 
   // prompt hints
   const promptStore = usePromptStore();
@@ -666,6 +667,7 @@ function _Chat() {
       for (let i = 0; i < data.length; i++) {
         if (data[i].userId === userId) {
           setLimit(data[i].amount);
+          setStatus(data[i].status);
         }
       }
     } catch (error) {
@@ -738,51 +740,55 @@ function _Chat() {
       session.stat.email = email;
     }
 
-    if (typeof limit === "undefined") {
-      getData();
+    console.log("status: ", status);
 
-      return;
-    }
+    if (status === "free") {
+      if (typeof limit === "undefined") {
+        getData();
 
-    let freeTierLimit = limit - 1;
+        return;
+      }
 
-    if (freeTierLimit === 0) {
-      const alertData = {
-        apiKey: process.env.NEXT_WEBHOOK_API_KEY,
-        data: {
-          user: {
-            phoneNumber: phone,
-          },
-          action: {
-            type: "sendMessages",
-            payload: {
-              data: {
-                messages: [
-                  {
-                    type: "extendedTextMessage",
-                    message: {
-                      text: "Please upgrade your plan",
+      let freeTierLimit = limit - 1;
+
+      if (freeTierLimit === 0) {
+        const alertData = {
+          apiKey: process.env.NEXT_WEBHOOK_API_KEY,
+          data: {
+            user: {
+              phoneNumber: phone,
+            },
+            action: {
+              type: "sendMessages",
+              payload: {
+                data: {
+                  messages: [
+                    {
+                      type: "extendedTextMessage",
+                      message: {
+                        text: "Please upgrade your plan",
+                      },
                     },
-                  },
-                ],
+                  ],
+                },
               },
             },
           },
-        },
-        event: "actionTrigger",
+          event: "actionTrigger",
+        };
+
+        limitAlert(alertData);
+        showToast("Free tier limit!");
+        return;
+      }
+
+      const agentData = {
+        userId,
+        amount: freeTierLimit,
       };
 
-      limitAlert(alertData);
-      showToast("Free tier limit!");
-      return;
+      updateData(agentData);
     }
-
-    const agentData = {
-      userId,
-      amount: freeTierLimit,
-    };
-
-    updateData(agentData);
 
     if (userInput.trim() === "") return;
 

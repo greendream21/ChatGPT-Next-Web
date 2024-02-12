@@ -7,6 +7,7 @@ const UserSchema = new Schema(
     email: { type: String },
     phone: { type: String },
     amount: { type: Number },
+    status: { type: String },
   },
   { timestamps: true },
 );
