@@ -1,5 +1,16 @@
 @import "../styles/animation.scss";
 
+.edit-input {
+  border-radius: 10px;
+  border: var(--border-in-light);
+  min-height: 36px;
+  box-sizing: border-box;
+  background: var(--white);
+  color: var(--black);
+  padding: 0 10px;
+  font-family: inherit;
+}
+
 .chat-input-actions {
   display: flex;
   flex-wrap: wrap;

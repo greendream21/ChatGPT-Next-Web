@@ -563,6 +563,7 @@ export function EditMessageModal(props: { onClose: () => void }) {
             subTitle={Locale.Chat.EditMessage.Topic.SubTitle}
           >
             <input
+              className={styles["edit-input"]}
               type="text"
               value={session.topic}
               onInput={(e) =>
