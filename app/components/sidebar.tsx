@@ -121,8 +121,7 @@ function useDragSideBar() {
   };
 
   const isMobileScreen = useMobileScreen();
-  const shouldNarrow =
-    !isMobileScreen && config.sidebarWidth < MIN_SIDEBAR_WIDTH;
+  const shouldNarrow = false;
 
   useEffect(() => {
     const barWidth = shouldNarrow
@@ -195,7 +194,7 @@ export function SideBar(props: { className?: string }) {
     >
       <div className={styles["sidebar-header"]} data-tauri-drag-region>
         <div className={styles["sidebar-title"]} data-tauri-drag-region>
-          NextChat
+          VL GPT
         </div>
         <div className={styles["sidebar-sub-title"]}>
           Build your own AI assistant.

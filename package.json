@@ -16,6 +16,7 @@
     "proxy-dev": "sh ./scripts/init-proxy.sh && proxychains -f ./scripts/proxychains.conf yarn dev"
   },
   "dependencies": {
+    "@clerk/localizations": "^1.26.15",
     "@clerk/nextjs": "^4.29.5",
     "@clerk/themes": "^1.7.9",
     "@fortaine/fetch-event-source": "^3.0.6",
