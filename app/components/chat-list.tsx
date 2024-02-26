@@ -239,7 +239,7 @@ export function ChatList(props: { narrow?: boolean }) {
                         style={{
                           position: "absolute",
                           zIndex: "1000",
-                          top: "10px",
+                          top: "6px",
                           right: "10px",
                         }}
                         onClickCapture={() => {
