@@ -1,5 +1,6 @@
 import DeleteIcon from "../icons/delete.svg";
 import DownIcon from "../icons/down.svg";
+import UpIcon from "../icons/up.svg";
 import BotIcon from "../icons/bot.svg";
 import AddIcon from "../icons/add.svg";
 
@@ -164,11 +165,17 @@ export function ChatList(props: { narrow?: boolean }) {
                     <div style={{ position: "relative" }} key={i}>
                       <AccordionItem
                         className={styles["accordionItem"]}
-                        header={
-                          <div className={styles["accordion-title-icon"]}>
-                            <DownIcon />
-                          </div>
-                        }
+                        header={({ state }) => {
+                          return state.isEnter ? (
+                            <div className={styles["accordion-title-icon"]}>
+                              <DownIcon />
+                            </div>
+                          ) : (
+                            <div className={styles["accordion-title-icon"]}>
+                              <UpIcon />
+                            </div>
+                          );
+                        }}
                         key={accordionItem.groupId}
                         initialEntered
                       >
