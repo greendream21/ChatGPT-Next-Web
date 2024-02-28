@@ -3,6 +3,7 @@ import DownIcon from "../icons/down.svg";
 import UpIcon from "../icons/up.svg";
 import BotIcon from "../icons/bot.svg";
 import AddIcon from "../icons/add.svg";
+import TrashIcon from "../icons/trash1.svg";
 
 import styles from "./home.module.scss";
 import {
@@ -23,6 +24,7 @@ import { useRef, useEffect, useState } from "react";
 import { showConfirm } from "./ui-lib";
 import { useMobileScreen } from "../utils";
 import { Accordion, AccordionItem } from "@szhsin/react-accordion";
+import { ConfirmModal } from "./prompter";
 
 export function ChatItem(props: {
   onClick?: () => void;
@@ -105,6 +107,7 @@ export function ChatList(props: { narrow?: boolean }) {
   const chatStore = useChatStore();
   const navigate = useNavigate();
   const isMobileScreen = useMobileScreen();
+  const [showModal, setShowModal] = useState(false);
 
   const [items, setItems] = useState<any>([]);
 
@@ -273,10 +276,21 @@ export function ChatList(props: { narrow?: boolean }) {
                             right: "10px",
                           }}
                           onClickCapture={() => {
-                            chatStore.deleteGroupSession(accordionItem.groupId);
+                            setShowModal(true);
                           }}
                         >
-                          <DeleteIcon />
+                          {showModal && (
+                            <ConfirmModal
+                              action={() => {
+                                chatStore.deleteGroupSession(
+                                  accordionItem.groupId,
+                                );
+                                setShowModal(false);
+                              }}
+                              onClose={() => setShowModal(false)}
+                            />
+                          )}
+                          <TrashIcon />
                         </div>
                       </div>
                       {provided.placeholder}

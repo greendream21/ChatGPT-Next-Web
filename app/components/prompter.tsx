@@ -19,6 +19,8 @@ import CopyIcon from "../icons/copy.svg";
 import ClearIcon from "../icons/clear.svg";
 import EditIcon from "../icons/edit.svg";
 import EyeIcon from "../icons/eye.svg";
+import TrashIcon from "../icons/trash.svg";
+import CancelIcon from "../icons/cancel.svg";
 import axios from "axios";
 import { useUser } from "@clerk/nextjs";
 
@@ -82,6 +84,40 @@ function Steps<
           );
         })}
       </div>
+    </div>
+  );
+}
+
+export function ConfirmModal(props: {
+  action?: () => void;
+  onClose?: () => void;
+}) {
+  return (
+    <div className="modal-mask">
+      <Modal
+        title={Locale.Settings.Prompt.Modal.Title}
+        onClose={() => props.onClose?.()}
+        actions={[
+          <IconButton
+            key="Delete"
+            onClick={() => props.action?.()}
+            bordered
+            icon={<TrashIcon />}
+            text="Delete"
+          />,
+          <IconButton
+            key="Cancel"
+            onClick={() => props.onClose?.()}
+            bordered
+            icon={<CancelIcon />}
+            text="Cancel"
+          />,
+        ]}
+      >
+        <div className="flex justify-center items-center">
+          <h2>Do you delete this folder?</h2>
+        </div>
+      </Modal>
     </div>
   );
 }
