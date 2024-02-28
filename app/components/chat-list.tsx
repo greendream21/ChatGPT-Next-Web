@@ -88,6 +88,10 @@ export function ChatItem(props: {
   );
 }
 
+function isHeaderCheck(data: any) {
+  if (data.isHeader === true) return data;
+}
+
 export function ChatList(props: { narrow?: boolean }) {
   const [sessions, selectedIndex, selectSession, moveSession] = useChatStore(
     (state) => [
@@ -120,8 +124,23 @@ export function ChatList(props: { narrow?: boolean }) {
     setItems(uniqueData);
   }, [sessions]);
 
+  const moveGroup = (id: any, destination: any) => {
+    console.log(sessions);
+
+    console.log(destination.droppableId);
+    for (let i = 0; i < sessions.length; i++) {
+      if (sessions[i].id === id) {
+        if (destination.droppableId === "chat-list") {
+          sessions[i].groupId = "";
+        } else {
+          sessions[i].groupId = destination.droppableId;
+        }
+      }
+    }
+  };
+
   const onDragEnd: OnDragEndResponder = (result) => {
-    const { destination, source } = result;
+    const { destination, source, draggableId } = result;
     if (!destination) {
       return;
     }
@@ -134,6 +153,7 @@ export function ChatList(props: { narrow?: boolean }) {
     }
 
     moveSession(source.index, destination.index);
+    moveGroup(draggableId, destination);
   };
 
   const handleTitleChange = (event: any, index: any) => {
@@ -151,6 +171,122 @@ export function ChatList(props: { narrow?: boolean }) {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      <Accordion allowMultiple>
+        {items.map(
+          (accordionItem: any, i: any) =>
+            accordionItem.isHeader && (
+              <div style={{ position: "relative" }} key={i}>
+                <Droppable droppableId={`${accordionItem.groupId}`}>
+                  {(provided) => (
+                    <div
+                      className={styles["chat-list"]}
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
+                    >
+                      <div>
+                        <AccordionItem
+                          className={styles["accordionItem"]}
+                          header={({ state }) => {
+                            return state.isEnter ? (
+                              <div className={styles["accordion-title-icon"]}>
+                                <DownIcon />
+                              </div>
+                            ) : (
+                              <div className={styles["accordion-title-icon"]}>
+                                <UpIcon />
+                              </div>
+                            );
+                          }}
+                          key={accordionItem.groupId}
+                          initialEntered
+                        >
+                          {sessions.map((item, i) => {
+                            if (
+                              item.groupId === accordionItem.groupId &&
+                              !item.isHeader
+                            ) {
+                              return (
+                                <ChatItem
+                                  title={item.topic}
+                                  key={item.id}
+                                  id={item.id}
+                                  index={i}
+                                  selected={i === selectedIndex}
+                                  onClick={() => {
+                                    navigate(Path.Chat);
+                                    selectSession(i);
+                                  }}
+                                  onDelete={async () => {
+                                    if (
+                                      (!props.narrow && !isMobileScreen) ||
+                                      (await showConfirm(
+                                        Locale.Home.DeleteChat,
+                                      ))
+                                    ) {
+                                      chatStore.deleteSession(i);
+                                    }
+                                  }}
+                                  narrow={props.narrow}
+                                  mask={item.mask}
+                                />
+                              );
+                            } else {
+                              return null;
+                            }
+                          })}
+                        </AccordionItem>
+
+                        <div
+                          style={{
+                            position: "absolute",
+                            zIndex: "1000",
+                            top: "5px",
+                            left: "30px",
+                          }}
+                        >
+                          <input
+                            className={styles["accordion-title"]}
+                            value={accordionItem.groupTitle}
+                            onChange={(e) => handleTitleChange(e, i)}
+                            disabled
+                          />
+                        </div>
+
+                        <div
+                          style={{
+                            position: "absolute",
+                            zIndex: "1000",
+                            top: "10px",
+                            right: "30px",
+                          }}
+                          onClick={() => {
+                            chatStore.newGroupSession(accordionItem);
+                          }}
+                        >
+                          <AddIcon />
+                        </div>
+                        <div
+                          style={{
+                            position: "absolute",
+                            zIndex: "1000",
+                            top: "6px",
+                            right: "10px",
+                          }}
+                          onClickCapture={() => {
+                            chatStore.deleteGroupSession(accordionItem.groupId);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </div>
+                      </div>
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </div>
+            ),
+        )}
+      </Accordion>
       <Droppable droppableId="chat-list">
         {(provided) => (
           <div
@@ -158,107 +294,6 @@ export function ChatList(props: { narrow?: boolean }) {
             ref={provided.innerRef}
             {...provided.droppableProps}
           >
-            <Accordion allowMultiple>
-              {items.map(
-                (accordionItem: any, i: any) =>
-                  accordionItem.isHeader && (
-                    <div style={{ position: "relative" }} key={i}>
-                      <AccordionItem
-                        className={styles["accordionItem"]}
-                        header={({ state }) => {
-                          return state.isEnter ? (
-                            <div className={styles["accordion-title-icon"]}>
-                              <DownIcon />
-                            </div>
-                          ) : (
-                            <div className={styles["accordion-title-icon"]}>
-                              <UpIcon />
-                            </div>
-                          );
-                        }}
-                        key={accordionItem.groupId}
-                        initialEntered
-                      >
-                        {sessions.map((item, i) => {
-                          if (
-                            item.groupId === accordionItem.groupId &&
-                            !item.isHeader
-                          ) {
-                            return (
-                              <ChatItem
-                                title={item.topic}
-                                key={item.id}
-                                id={item.id}
-                                index={i}
-                                selected={i === selectedIndex}
-                                onClick={() => {
-                                  navigate(Path.Chat);
-                                  selectSession(i);
-                                }}
-                                onDelete={async () => {
-                                  if (
-                                    (!props.narrow && !isMobileScreen) ||
-                                    (await showConfirm(Locale.Home.DeleteChat))
-                                  ) {
-                                    chatStore.deleteSession(i);
-                                  }
-                                }}
-                                narrow={props.narrow}
-                                mask={item.mask}
-                              />
-                            );
-                          } else {
-                            return null;
-                          }
-                        })}
-                      </AccordionItem>
-
-                      <div
-                        style={{
-                          position: "absolute",
-                          zIndex: "1000",
-                          top: "5px",
-                          left: "30px",
-                        }}
-                      >
-                        <input
-                          className={styles["accordion-title"]}
-                          value={accordionItem.groupTitle}
-                          onChange={(e) => handleTitleChange(e, i)}
-                          disabled
-                        />
-                      </div>
-
-                      <div
-                        style={{
-                          position: "absolute",
-                          zIndex: "1000",
-                          top: "10px",
-                          right: "30px",
-                        }}
-                        onClick={() => {
-                          chatStore.newGroupSession(accordionItem);
-                        }}
-                      >
-                        <AddIcon />
-                      </div>
-                      <div
-                        style={{
-                          position: "absolute",
-                          zIndex: "1000",
-                          top: "6px",
-                          right: "10px",
-                        }}
-                        onClickCapture={() => {
-                          chatStore.deleteGroupSession(accordionItem.groupId);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </div>
-                    </div>
-                  ),
-              )}
-            </Accordion>
             {sessions.map((item, i) =>
               !item.isHeader && !item.groupId ? (
                 <ChatItem
