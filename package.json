@@ -23,7 +23,7 @@
     "@hello-pangea/dnd": "^16.5.0",
     "@mistralai/mistralai": "^0.0.10",
     "@peculiar/webcrypto": "^1.4.5",
-    "@svgr/webpack": "^6.5.1",
+    "@svgr/webpack": "^8.1.0",
     "@szhsin/react-accordion": "^1.2.3",
     "@vercel/analytics": "^0.1.11",
     "@vercel/speed-insights": "^1.0.2",
